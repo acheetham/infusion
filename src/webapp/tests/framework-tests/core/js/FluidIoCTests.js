@@ -1453,4 +1453,84 @@ fluid.registerNamespace("fluid.tests");
         jqUnit.assert("No error fired on cross-island dispatch");
     });
 
+    /*******************************
+     * Injecting an aggregate event
+     *******************************/
+    fluid.defaults("fluid.tests.comp1", {
+        gradeNames: ["fluid.eventedComponent", "autoInit"],
+        events: {
+            onReady: null
+        },
+        components: {
+            comp2: {
+                type: "fluid.tests.comp2",
+                options: {
+                    events: {
+                        onReady: "{comp1}.events.onReady"
+                    }
+                }
+            }
+        }
+    });
+    fluid.defaults("fluid.tests.comp2", {
+        gradeNames: ["fluid.eventedComponent", "autoInit"],
+        events: {
+            onComp3ready: null,
+            onComp4ready: null,
+            onReady: { // when comp3 and comp4 fire their onReady, comp2's onReady will fire
+                events: {
+                    comp3ready: "onComp3ready",
+                    comp4ready: "onComp4ready"
+                }
+            }
+        },
+        components: {
+            comp3: {
+                type: "fluid.tests.comp3",
+                options: {
+                    events: {
+                        onReady: "{comp2}.events.onComp3ready"
+                    }
+                }
+            },
+            comp4: {
+                type: "fluid.tests.comp4",
+                options: {
+                    events: {
+                        onReady: "{comp2}.events.onComp4ready"
+                    }
+                }
+            }
+        }
+    });
+    fluid.defaults("fluid.tests.comp3", {
+        gradeNames: ["fluid.eventedComponent", "autoInit"],
+        events: {
+            onReady: null
+        },
+        finalInitFunction: "fluid.tests.onReadyFirer"
+    });
+    fluid.defaults("fluid.tests.comp4", {
+        gradeNames: ["fluid.eventedComponent", "autoInit"],
+        events: {
+            onReady: null
+        },
+        finalInitFunction: "fluid.tests.onReadyFirer"
+    });
+    fluid.tests.onReadyFirer = function (that) {
+        that.events.onReady.fire(that);
+    };
+
+    fluidIoCTests.asyncTest("FLUID-XXXX: Injecting an aggregate event", function () {
+        jqUnit.expect(1);
+        fluid.tests.comp1({
+            listeners: {
+                onReady: function (that) {
+                    jqUnit.assertTrue("root onReady event should fire", true);
+                    start();
+                }
+            }
+        });
+    });
+
 })(jQuery); 
