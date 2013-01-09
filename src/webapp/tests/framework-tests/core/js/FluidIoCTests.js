@@ -1521,7 +1521,7 @@ fluid.registerNamespace("fluid.tests");
         that.events.onReady.fire(that);
     };
 
-    fluidIoCTests.asyncTest("FLUID-XXXX: Injecting an aggregate event", function () {
+    fluidIoCTests.asyncTest("FLUID-4879: Injecting an aggregate event", function () {
         jqUnit.expect(1);
         fluid.tests.comp1({
             listeners: {
