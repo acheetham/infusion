@@ -1453,22 +1453,17 @@ fluid.registerNamespace("fluid.tests");
         jqUnit.assert("No error fired on cross-island dispatch");
     });
 
-    /*******************************
-     * Injecting an aggregate event
-     *******************************/
+    /*******************************************
+     * FLUID-4879: Injecting an aggregate event
+     *******************************************/
     fluid.defaults("fluid.tests.comp1", {
         gradeNames: ["fluid.eventedComponent", "autoInit"],
         events: {
-            onReady: null
+            onReady: "{comp1}.comp2.events.onReady"
         },
         components: {
             comp2: {
-                type: "fluid.tests.comp2",
-                options: {
-                    events: {
-                        onReady: "{comp1}.events.onReady"
-                    }
-                }
+                type: "fluid.tests.comp2"
             }
         }
     });
@@ -1522,12 +1517,46 @@ fluid.registerNamespace("fluid.tests");
     };
 
     fluidIoCTests.asyncTest("FLUID-4879: Injecting an aggregate event", function () {
-        jqUnit.expect(1);
+        jqUnit.expect(3);
         fluid.tests.comp1({
             listeners: {
                 onReady: function (that) {
                     jqUnit.assertTrue("root onReady event should fire", true);
                     start();
+                }
+            },
+            components: {
+                comp2: {
+                    options: {
+                        listeners: {
+                            onReady: function () {
+                                fluid.log("===== comp2's onReady listener");
+                                jqUnit.assertTrue("comp2's onReady should fire", true);
+                            }
+                        },
+                        components: {
+                            comp3: {
+                                options: {
+                                    listeners: {
+                                        onReady: function () {
+                                            fluid.log("===== comp3's onReady listener");
+                                            jqUnit.assertTrue("comp3's onReady should fire", true);
+                                        }
+                                    }
+                                }
+                            },
+                            comp4: {
+                                options: {
+                                    listeners: {
+                                        onReady: function () {
+                                            fluid.log("===== comp4's onReady listener");
+                                            jqUnit.assertTrue("comp4's onReady should fire", true);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         });
