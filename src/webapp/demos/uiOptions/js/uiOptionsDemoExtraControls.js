@@ -66,27 +66,39 @@ var demo = demo || {};
             target: "{that > templateLoader}.options.templates",
             record: {
                 uiOptions: "FullExtraControlsTemplate.html",
-                extraControls: "UIOptionsTemplate-extraControls.html"
+                controlRenderingSample: "UIOptionsTemplate-controlRenderingSample.html",
+                extraControls2: "UIOptionsTemplate-extraControls2.html"
             }
-        },{
+        }, {
             target: "{that > uiOptionsLoader > uiOptions}",
             record: {
                 selectors: {
-                    extraControls: ".flc-uiOptions-extra-controls" 
+                    controlRenderingSample: ".flc-uiOptions-controlRenderingSample",
+                    extraControls2: ".flc-uiOptions-extra-controls2"
                 },
                 components: {
-                    extraControls: {
-                        type: "fluid.uiOptions.extraControls",
-                        container: "{uiOptions}.dom.extraControls",
+                    controlRenderingSample: {
+                        type: "fluid.uiOptions.controlRenderingSample",
+                        container: "{uiOptions}.dom.controlRenderingSample",
                         createOnEvent: "onUIOptionsMarkupReady",
                         options: {
-                            model: "{uiOptions}.model",
-                            applier: "{uiOptions}.applier",
-                            rendererOptions: "{uiOptions}.options.rendererOptions",
-                            events: {
-                                onUIOptionsRefresh: "{uiOptions}.events.onUIOptionsRefresh"
+                            resources: {
+                                template: "{templateLoader}.resources.controlRenderingSample"
+                            }
+
+                        }
+/*
+                    },
+                    extraControls2: {
+                        type: "fluid.uiOptions.controlRenderingSample",
+                        container: "{uiOptions}.dom.extraControls2",
+                        createOnEvent: "onUIOptionsMarkupReady",
+                        options: {
+                            resources: {
+                                template: "{templateLoader}.resources.extraControls2"
                             }
                         }
+*/
                     }
                 }
             }
@@ -100,21 +112,39 @@ var demo = demo || {};
         fluid.uiOptions.fullNoPreview(container, $.extend(true, {}, opts, options));
     };
     
+    /***************************************************
+     * Grade to be used for any 'extra controls' panel *
+     ***************************************************/
+    fluid.defaults("fluid.uiOptions.controlsPanel", {
+        gradeNames: ["fluid.uiOptions.ant"],
+        model: "{uiOptions}.model",
+        applier: "{uiOptions}.applier",
+        rendererOptions: "{uiOptions}.options.rendererOptions",
+        events: {
+            onUIOptionsRefresh: "{uiOptions}.events.onUIOptionsRefresh"
+        }
+    });
+
     /**********************************************
-     * UI Options Media Controls Panel Components *
+     * UI Options Extra Controls Panel Components *
      **********************************************/
     /**
      * A sub-component of fluid.uiOptions that renders the "media" panel of the user preferences interface.
      */
-    fluid.defaults("fluid.uiOptions.extraControls", {
-        gradeNames: ["fluid.uiOptions.ant", "autoInit"], 
+    fluid.defaults("fluid.uiOptions.controlRenderingSample", {
+        gradeNames: ["fluid.uiOptions.controlsPanel", "autoInit"],
+        rendererOptions: {
+//            debugMode: true
+        },
         strings: {
-            language: ["English", "French"]
+            sampleDropdown: ["English", "French"],
+            sampleRadioButtons: ["Option 1", "Option 2", "Option 3"]
         },
         controlValues: {
-            language: ["en", "fr"] 
+            sampleDropdown: ["en", "fr"] ,
+            sampleRadioButtons: ["opt1", "opt2", "opt3"]
         },
-        volume: {
+        sampleSlider: {
             min: 0,
             max: 100,
             sliderOptions: {
@@ -123,36 +153,55 @@ var demo = demo || {};
             }
         },
         selectors: {
-            volume: ".flc-uiOptions-volume",
-            captions: ".flc-uiOptions-captions",
-            transcripts: ".flc-uiOptions-transcripts",
-            language: ".flc-uiOptions-language"
+            sampleSlider: ".flc-uiOptions-sampleSlider",
+            sampleCheckbox: ".flc-uiOptions-sampleCheckbox",
+            sampleDropdown: ".flc-uiOptions-sampleDropdown",
+            radioRow: ".flc-uiOptions-sampleRadioButtons-radio",
+            radioButton: ".flc-uiOptions-sampleRadioButtons-radioButton",
+            radioLabel: ".flc-uiOptions-sampleRadioButtons-radioLabel"
         },
+        repeatingSelectors: ["radioRow"],
         defaultModel: {
-            captions: false,             // boolean
-            transcripts: false,          // boolean
-            language: "en",               // ISO 639-1 language code
-            volume: 50                    // number between 0 and 100
+            sampleCheckbox: false,             // boolean
+            sampleDropdown: "en",               // ISO 639-1 language code
+            sampleSlider: 50,                    // number between 0 and 100
+            sampleRadioButtons: "opt2"
         },
-        produceTree: "fluid.uiOptions.extraControls.produceTree",
+        produceTree: "fluid.uiOptions.controlRenderingSample.produceTree",
         resources: {
-            template: "{templateLoader}.resources.extraControls"
+            template: "{templateLoader}.resources.controlRenderingSample" // this doesn't customize to the specified template!!
         }
     });
 
-    fluid.uiOptions.extraControls.produceTree = function (that) {
+    fluid.uiOptions.controlRenderingSample.produceTree = function (that) {
         var tree = {};
         for (var item in that.model.selections) {
-            if (item === "captions" || item === "transcripts") {
+            if (item === "sampleCheckbox") {
                 tree[item] = "${selections." + item + "}";
-            } else if (item === "language") {
+
+            } else if (item === "sampleDropdown") {
                 tree[item] = {
                     optionnames: "${labelMap." + item + ".names}",
                     optionlist: "${labelMap." + item + ".values}",
-                    selection: "${selections.language}"
+                    selection: "${selections." + item + "}"
                 };
-            } else if (item === "volume") {
+
+            } else if (item === "sampleSlider") {
                 tree[item] = fluid.uiOptions.createSliderNode(that, item, "fluid.textfieldSlider.slider");
+
+            } else if (item === "sampleRadioButtons") {
+                tree.expander = {
+                    type: "fluid.renderer.selection.inputs",
+                    rowID: "radioRow",
+                    labelID: "radioLabel",
+                    inputID: "radioButton",
+                    selectID: "sampleRadioButtons",
+                    tree: {
+                        optionnames: "${labelMap." + item + ".names}",
+                        optionlist: "${labelMap." + item + ".values}",
+                        selection: "${selections." + item + "}"
+                    }
+                };
             }
         }
 
