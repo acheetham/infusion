@@ -67,14 +67,14 @@ var demo = demo || {};
             record: {
                 uiOptions: "FullExtraControlsTemplate.html",
                 controlRenderingSample: "UIOptionsTemplate-controlRenderingSample.html",
-                extraControls2: "UIOptionsTemplate-extraControls2.html"
+                extraControls: "UIOptionsTemplate-extraControls.html"
             }
         }, {
             target: "{that > uiOptionsLoader > uiOptions}",
             record: {
                 selectors: {
                     controlRenderingSample: ".flc-uiOptions-controlRenderingSample",
-                    extraControls2: ".flc-uiOptions-extra-controls2"
+                    extraControls: ".flc-uiOptions-extra-controls"
                 },
                 components: {
                     controlRenderingSample: {
@@ -87,18 +87,16 @@ var demo = demo || {};
                             }
 
                         }
-/*
                     },
-                    extraControls2: {
-                        type: "fluid.uiOptions.controlRenderingSample",
-                        container: "{uiOptions}.dom.extraControls2",
+                    extraControls: {
+                        type: "fluid.uiOptions.extraControls",
+                        container: "{uiOptions}.dom.extraControls",
                         createOnEvent: "onUIOptionsMarkupReady",
                         options: {
                             resources: {
-                                template: "{templateLoader}.resources.extraControls2"
+                                template: "{templateLoader}.resources.extraControls"
                             }
                         }
-*/
                     }
                 }
             }
@@ -119,23 +117,19 @@ var demo = demo || {};
         gradeNames: ["fluid.uiOptions.ant"],
         model: "{uiOptions}.model",
         applier: "{uiOptions}.applier",
-        rendererOptions: "{uiOptions}.options.rendererOptions",
         events: {
             onUIOptionsRefresh: "{uiOptions}.events.onUIOptionsRefresh"
         }
     });
 
-    /**********************************************
-     * UI Options Extra Controls Panel Components *
-     **********************************************/
+    /***************************************
+     * UI Options Control Rendering Sample *
+     ***************************************/
     /**
-     * A sub-component of fluid.uiOptions that renders the "media" panel of the user preferences interface.
+     * A sub-component of fluid.uiOptions that renders a sampling of controls.
      */
     fluid.defaults("fluid.uiOptions.controlRenderingSample", {
         gradeNames: ["fluid.uiOptions.controlsPanel", "autoInit"],
-        rendererOptions: {
-//            debugMode: true
-        },
         strings: {
             sampleDropdown: ["English", "French"],
             sampleRadioButtons: ["Option 1", "Option 2", "Option 3"]
@@ -169,7 +163,7 @@ var demo = demo || {};
         },
         produceTree: "fluid.uiOptions.controlRenderingSample.produceTree",
         resources: {
-            template: "{templateLoader}.resources.controlRenderingSample" // this doesn't customize to the specified template!!
+            template: "{templateLoader}.resources.controlRenderingSample"
         }
     });
 
@@ -192,10 +186,61 @@ var demo = demo || {};
             } else if (item === "sampleRadioButtons") {
                 tree.expander = {
                     type: "fluid.renderer.selection.inputs",
+                    selectID: "sampleRadioButtons",
                     rowID: "radioRow",
                     labelID: "radioLabel",
                     inputID: "radioButton",
-                    selectID: "sampleRadioButtons",
+                    tree: {
+                        optionnames: "${labelMap." + item + ".names}",
+                        optionlist: "${labelMap." + item + ".values}",
+                        selection: "${selections." + item + "}"
+                    }
+                };
+            }
+        }
+
+        return tree;
+    };
+
+    /*************************************
+     * UI Options Control Extra Controls *
+     *************************************/
+    /**
+     * A sub-component of fluid.uiOptions that renders extra controls.
+     */
+    fluid.defaults("fluid.uiOptions.extraControls", {
+        gradeNames: ["fluid.uiOptions.controlsPanel", "autoInit"],
+        strings: {
+            onscreenKeyboard: ["Show Onscreen Keyboard", "Hide Onscreen Keyboard"]
+        },
+        controlValues: {
+            onscreenKeyboard: ["show", "hide"]
+        },
+        selectors: {
+            oskRow: ".flc-uiOptions-onscreenKeyboard-radio",
+            oskButton: ".flc-uiOptions-onscreenKeyboard-radioButton",
+            oskLabel: ".flc-uiOptions-onscreenKeyboard-radioLabel"
+        },
+        repeatingSelectors: ["oskRow"],
+        defaultModel: {
+            onscreenKeyboard: "show"
+        },
+        produceTree: "fluid.uiOptions.extraControls.produceTree",
+        resources: {
+            template: "{templateLoader}.resources.extraControls"
+        }
+    });
+
+    fluid.uiOptions.extraControls.produceTree = function (that) {
+        var tree = {};
+        for (var item in that.model.selections) {
+            if (item === "onscreenKeyboard") {
+                tree.expander = {
+                    type: "fluid.renderer.selection.inputs",
+                    selectID: "onscreenKeyboard",
+                    rowID: "oskRow",
+                    labelID: "oskLabel",
+                    inputID: "oskButton",
                     tree: {
                         optionnames: "${labelMap." + item + ".names}",
                         optionlist: "${labelMap." + item + ".values}",
