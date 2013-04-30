@@ -229,4 +229,65 @@ var fluid_1_5 = fluid_1_5 || {};
         });
     };
 
+    /************************************/
+    fluid.staticEnvironment.extraStuff = fluid.typeTag("fluid.extraStuff");
+    var extraSiteSettings = {
+        simplifiedContent: false,
+        selfVoicing: false
+    };
+    fluid.demands("fluid.uiEnhancer", ["fluid.extraStuff"], {
+        options: {
+            gradeNames: ["fluid.uiEnhancer.defaultActions", "fluid.uiEnhancer.extraActions"],
+            defaultSiteSettings: extraSiteSettings,
+            components: {
+                simplifiedContent: {
+                    options: {
+                        listeners: {
+                            settingChanged: "{uiEnhancer}.events.simplifyContentChanged"
+                        }
+                    }
+                }
+            },
+            events: {
+                simplifyContentChanged: null
+            },
+            listeners: {
+                simplifyContentChanged: {
+                    listener: "demo.updateToc",
+                    args: "{that}.tableOfContents"
+                }
+            }
+        }
+    });
+    fluid.demands("fluid.uiOptions", ["fluid.extraStuff"], {
+        options: {
+            gradeNames: ["fluid.uiOptions.defaultSettingsPanels", "fluid.uiOptions.extraSettingsPanels"]
+        }
+    });
+    fluid.demands("fluid.uiOptions.templateLoader", ["fluid.extraStuff"], {
+        options: {
+            templates: {
+                uiOptions: "templates/FatPanelUIOptions.html",
+                simplifiedContent: "templates/UIOptionsTemplate-simplifiedContent.html",
+                selfVoicing: "templates/UIOptionsTemplate-selfVoicing.html"
+             }
+        }
+    });
+    fluid.demands("fluid.uiOptions.fatPanel", ["fluid.extraStuff"], {
+        options: {
+            outerEnhancerOptions: {
+                defaultSiteSettings: extraSiteSettings
+            }
+        }
+    });
+    fluid.demands("iframeEnhancer", null, {
+        options: {
+            components: {
+                selfVoicingEnactor: {
+                    type: "fluid.emptySubcomponent"
+                }
+            }
+        }
+    });
+
 })(jQuery, fluid_1_5);
