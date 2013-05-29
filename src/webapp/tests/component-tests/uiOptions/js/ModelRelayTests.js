@@ -62,6 +62,9 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         that.applier.modelChanged.addListener("value", function (newModel) {
             resultValue = newModel.value;
         });
+        if (that.options.rules.transcriptLanguage){
+            that.options.rules.transcriptLanguage.expander.component = that;
+        }
     };
     
     fluid.tests.checkResult = function (expectedValue) {
@@ -114,14 +117,11 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         }
     });
 
-    fluid.tests.modelRelayTransformation.langLookup = {
-        en: "English",
-        fr: "French"
-    }
     fluid.defaults("fluid.uiOptions.modelRelayTransformationWrapper", {
         gradeNames: ["fluid.modelComponent", "fluid.eventedComponent", "autoInit"],
         model: {
-            captionLanguage: "en"
+            captionLanguage: "en",
+            transcriptLanguage: "en"
         },
         increment: 10,
         components: {
@@ -135,6 +135,13 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
                             expander: {
                                 type: "fluid.uiOptions.modelRelayTransformationWrapper.transform",
                                 inputPath: "captionLanguage"
+                            }
+                        },
+                        transcriptLanguage: {
+                            path: "currentTracks.transcripts",
+                            expander: {
+                                type: "fluid.uiOptions.modelRelayTransformationWrapper.transform",
+                                inputPath: "transcriptLanguage"
                             }
                         }
                     },
@@ -154,8 +161,12 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
             }
         }
     });
-
-    fluid.uiOptions.modelRelayTransformationWrapper.transform = function (value) {
+    fluid.tests.modelRelayTransformation.langLookup = {
+        en: "English",
+        fr: "French"
+    }
+    fluid.uiOptions.modelRelayTransformationWrapper.transform = function (value, something, rule) {
+        var that = rule.component;
         return fluid.tests.modelRelayTransformation.langLookup[value];
     };
     fluid.uiOptions.modelRelayTransformationWrapper.transformWithArgs = function (that, value) {
@@ -177,7 +188,7 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         modules: [{
             name: "Test model relay transformation",
             tests: [{
-                expect: 1,
+                expect: 2,
                 name: "The applier change request on the modelRelay wrapper triggers the value transformation",
                 sequence: [{
                     func: "{modelRelayWrapper}.applier.requestChange",
@@ -186,6 +197,14 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
                     listenerMaker: "fluid.tests.checkTransformedResult",
                     makerArgs: ["{that}.options.testOptions.newLangTransformed", "{modelRelayWrapper}.modelRelayImpl.model", "currentTracks.captions", "Invoker transformation produces the correct value"],
                     spec: {path: "captionLanguage", priority: "last"},
+                    changeEvent: "{modelRelayWrapper}.applier.modelChanged"
+                }, {
+                    func: "{modelRelayWrapper}.applier.requestChange",
+                    args: ["transcriptLanguage", "{that}.options.testOptions.newLang"]
+                }, {
+                    listenerMaker: "fluid.tests.checkTransformedResult",
+                    makerArgs: ["{that}.options.testOptions.newLangTransformed", "{modelRelayWrapper}.modelRelayImpl.model", "currentTracks.transcripts", "Invoker transformation produces the correct value"],
+                    spec: {path: "transcriptLanguage", priority: "last"},
                     changeEvent: "{modelRelayWrapper}.applier.modelChanged"
                 }]
             }]
