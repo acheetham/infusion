@@ -51,7 +51,7 @@ var demo = demo || {};
     demo.initPageEnhancer = function (customThemeName) {
         fluid.pageEnhancer({
             uiEnhancer: {
-                gradeNames: ["fluid.uiEnhancer.starterEnactors"],
+                gradeNames: ["fluid.uiEnhancer.starterEnactors", "demo.customEnactors"],
                 tocTemplate: pathToTocTemplate,
                 classnameMap: {
                     theme: {
@@ -77,7 +77,7 @@ var demo = demo || {};
         },
         // Tell UIOptions where to redirect to if the user cancels the operation
         uiOptions: {
-            gradeNames: ["fluid.uiOptions.starterPanels", "fluid.uiOptions.rootModel.starter", "fluid.uiOptions.uiEnhancerRelay"],
+            gradeNames: ["fluid.uiOptions.starterPanels", "fluid.uiOptions.rootModel.starter", "demo.rootModel.extras", "fluid.uiOptions.uiEnhancerRelay", "demos.customPanels"],
             listeners: {
                 onCancel: function () {
                     alert("Cancelled - would normally cancel any unsaved changes and return to the previous page.");
@@ -104,10 +104,165 @@ var demo = demo || {};
     demo.initFullWithPreview = function (container, options) {
         var previewOps = {
             templateLoader: {
-                gradeNames: ["fluid.uiOptions.starterFullPreviewTemplateLoader"]
+                gradeNames: ["fluid.uiOptions.starterFullPreviewTemplateLoader", "demo.fullPreviewTemplateLoader"]
             }
         };
         fluid.uiOptions.fullPreview(container, $.extend(true, {}, basicFullPageOpts, previewOps, options));
     };
 
+    fluid.defaults("demos.customPanels", {
+        gradeNames: ["fluid.uiOptions", "autoInit"],
+        selectors: {
+            playfulness: ".flc-uiOptions-playfulness"
+        },
+        components: {
+            playfulness: {
+                type: "demo.panels.playfulness",
+                createOnEvent: "onUIOptionsMarkupReady",
+                container: "{uiOptions}.dom.playfulness",
+                createOnEvent: "onUIOptionsMarkupReady",
+                options: {
+                    gradeNames: "fluid.uiOptions.defaultPanel",
+                    rules: {
+                        "playfulness": "value"
+                    },
+                    model: {
+                        playfulness: "{fluid.uiOptions.rootModel}.rootModel.playfulness"
+                    },
+                    resources: {
+                        template: "{templateLoader}.resources.playfulness"
+                    }
+                }
+            }
+        }
+    });
+    fluid.defaults("demo.fullPreviewTemplateLoader", {
+        gradeNames: ["fluid.uiOptions.resourceLoader", "autoInit"],
+        templates: {
+            uiOptions: "../html/FullPreviewUIOptions.html",
+            playfulness: "../html/TestTemplate.html"
+        }
+    });
+    fluid.defaults("demo.panels.playfulness", {
+        gradeNames: ["fluid.uiOptions.panels", "autoInit"],
+        model: {
+            value: "2"
+        },
+        strings: {
+            size: ["Ruler on the knuckes", "Smile!", "Feather boa"]
+        },
+        controlValues: {
+            size: ["1", "2", "3"]
+        },
+        styles: {
+            icon: "fl-icon"
+        },
+        selectors: {
+            slider: ".democ-playfulness-slider",
+            dropdown: ".democ-playfulness-dropdown",
+        },
+        range: {
+            min: 1,
+            max: 3
+        },
+        sliderOptions: {
+            orientation: "horizontal",
+            step: 1.0
+        },
+        produceTree: "demo.panels.playfulness.produceTree"
+    });
+    demo.panels.playfulness.produceTree = function (that) {
+        var sliderOptions = $.extend(true, {}, that.options.sliderOptions, that.model, that.options.range);
+        sliderOptions.slide = function (event, ui) {
+            that.applier.requestChange("value", ui.value.toString());
+        };
+        var tree = {
+            slider: {
+                decorators: {
+                    type: "jQuery",
+                    func: "slider",
+                    args: [sliderOptions]
+                }
+            },
+            dropdown: {
+                optionnames: "${{that}.options.strings.size}",
+                optionlist: "${{that}.options.controlValues.size}",
+                selection: "${value}"
+            }
+        };
+        return tree;
+    };
+    demo.panels.playfulness.finalInit = function (that) {
+        // the framework does not yet have a declarative way to attach listeners to the modelChanged event
+        that.applier.modelChanged.addListener("value", function (newModel, oldModel, request) {
+            that.refreshView();
+        });
+    };
+    fluid.defaults("demo.enactors.playfulness", {
+        gradeNames: ["fluid.viewComponent", "fluid.uiOptions.enactors", "autoInit"],
+        classes: {
+            "1": "demo-playful-strict",
+            "2": "",
+            "3": "demo-playful-playful"
+        },
+        invokers: {
+            clearClasses: {
+                funcName: "fluid.uiOptions.enactors.classSwapper.clearClasses",
+                args: ["{that}.container", "{that}.classStr"]
+            },
+            swap: {
+                funcName: "fluid.uiOptions.enactors.classSwapper.swap",
+                args: ["{arguments}.0", "{that}"]
+            }
+        },
+        listeners: {
+            onCreate: {
+                listener: "{that}.swap",
+                args: ["{that}.model.value"]
+            }
+        },
+        members: {
+            classStr: {
+                expander: {
+                    func: "fluid.uiOptions.enactors.classSwapper.joinClassStr",
+                    args: "{that}.options.classes"
+                }
+            }
+        }
+    });
+    demo.enactors.playfulness.finalInit = function (that) {
+        that.applier.modelChanged.addListener("value", function (newModel) {
+            that.swap(newModel.value);
+        });
+    };
+    fluid.defaults("demo.customEnactors", {
+        gradeNames: ["fluid.uiEnhancer", "autoInit"],
+        components: {
+            playfulness: {
+                type: "demo.enactors.playfulness",
+                container: "{uiEnhancer}.container",
+                options: {
+                    classes: "{uiEnhancer}.options.classnameMap.playfulness",
+                    sourceApplier: "{uiEnhancer}.applier",
+                    rules: {
+                        "playfulness": "value"
+                    },
+                    model: {
+                        value: "{fluid.uiOptions.rootModel}.rootModel.playfulness"
+                    }
+                }
+            }
+        }
+    });
+    fluid.defaults("demo.rootModel.extras", {
+        gradeNames: ["fluid.uiOptions.rootModel", "autoInit"],
+        members: {
+            // TODO: This information is supposed to be generated from the JSON
+            // schema describing various preferences. For now it's kept in top
+            // level uiOptions to avoid further duplication.
+            rootModel: {
+                playfulness: "2"
+            }
+        }
+    });
 })(jQuery, fluid);
