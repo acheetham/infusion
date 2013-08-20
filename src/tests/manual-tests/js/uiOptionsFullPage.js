@@ -157,7 +157,7 @@ var demo = demo || {};
     demo.panels.extraTextSize.produceTree = function (that) {
         var sliderOptions = $.extend(true, {}, that.options.sliderOptions, that.model, that.options.range);
 
-        // these 'parseInts' are a workaround for the fact that the settings are strings,
+        // this 'parseInt' is a workaround for the fact that the setting is a string,
         // but the slider needs integers:
         sliderOptions.value = parseInt(sliderOptions.value);
 

@@ -43,6 +43,8 @@ var demo = demo || {};
             },
             primarySchema: {
                 "demos.extraTextSize": {
+                    // the slider requires numbers, but the drop-down requires strings
+                    // currently, this preference is saved as a string, and not a number
                     "type": "string",
                     "default": "12",
                     "minimum": "8",
