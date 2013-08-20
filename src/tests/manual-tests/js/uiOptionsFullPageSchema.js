@@ -34,7 +34,7 @@ var demo = demo || {};
                         "type": "demo.enactors.extraTextSize"
                     },
                     "panel": {
-                        "type": "demo.panels.extraTextSizePanel",
+                        "type": "demo.panels.extraTextSize",
                         "container": ".democ-extraTextSize-panel",
                         "template": "../html/extraTextSizeTemplate.html",
                         "message": "../messages/customSize.json"
@@ -71,7 +71,7 @@ var demo = demo || {};
     };
 
 
-    fluid.defaults("demo.panels.extraTextSizePanel", {
+    fluid.defaults("demo.panels.extraTextSize", {
         gradeNames: ["fluid.uiOptions.panels", "autoInit"],
         preferenceMap: {
             "demos.extraTextSize": {
@@ -97,9 +97,9 @@ var demo = demo || {};
             orientation: "horizontal",
             step: 1.0
         },
-        produceTree: "demo.panels.extraTextSizePanel.produceTree"
+        produceTree: "demo.panels.extraTextSize.produceTree"
     });
-    demo.panels.extraTextSizePanel.produceTree = function (that) {
+    demo.panels.extraTextSize.produceTree = function (that) {
         var sliderOptions = $.extend(true, {}, that.options.sliderOptions, that.model, that.options.range);
 
         // these 'parseInts' are a workaround for the fact that the settings are strings,
@@ -127,7 +127,7 @@ var demo = demo || {};
         };
         return tree;
     };
-    demo.panels.extraTextSizePanel.finalInit = function (that) {
+    demo.panels.extraTextSize.finalInit = function (that) {
         // the framework does not yet have a declarative way to attach listeners to the modelChanged event
         that.applier.modelChanged.addListener("value", function (newModel, oldModel, request) {
             that.refreshView();
