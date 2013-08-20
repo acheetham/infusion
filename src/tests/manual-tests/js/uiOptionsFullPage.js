@@ -122,40 +122,45 @@ var demo = demo || {};
         gradeNames: ["fluid.uiOptions.resourceLoader", "autoInit"],
         templates: {
             uiOptions: "../html/FullPreviewUIOptions.html",
-            playfulness: "../html/TestTemplate.html"
+            extraTextSize: "../html/extraTextSizeTemplate.html"
         }
     });
 
     /**
      * Custom panel with two adjustors, a slider and a drop-down, bound to a single preference
      */
-    fluid.defaults("demo.panels.playfulness", {
+    fluid.defaults("demo.panels.extraTextSize", {
         gradeNames: ["fluid.uiOptions.panels", "autoInit"],
         strings: {
-            size: ["Ruler on the knuckes", "Smile!", "Feather boa"]
+            size: ["8pt", "9pt", "10pt", "11pt", "12pt", "13pt", "14pt", "15pt", "16pt", "17pt", "18pt"]
         },
         controlValues: {
-            size: ["0", "1", "2"]
+            size: ["8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18"]
         },
         styles: {
             icon: "fl-icon"
         },
         selectors: {
-            slider: ".democ-playfulness-slider",
-            dropdown: ".democ-playfulness-dropdown",
+            slider: ".democ-extraTextSize-slider",
+            dropdown: ".democ-extraTextSize-dropdown",
         },
         range: {
-            min: 0,
-            max: 2
+            min: 8,
+            max: 18
         },
         sliderOptions: {
             orientation: "horizontal",
             step: 1.0
         },
-        produceTree: "demo.panels.playfulness.produceTree"
+        produceTree: "demo.panels.extraTextSize.produceTree"
     });
-    demo.panels.playfulness.produceTree = function (that) {
+    demo.panels.extraTextSize.produceTree = function (that) {
         var sliderOptions = $.extend(true, {}, that.options.sliderOptions, that.model, that.options.range);
+
+        // these 'parseInts' are a workaround for the fact that the settings are strings,
+        // but the slider needs integers:
+        sliderOptions.value = parseInt(sliderOptions.value);
+
         sliderOptions.slide = function (event, ui) {
             that.applier.requestChange("value", ui.value.toString());
         };
@@ -175,7 +180,7 @@ var demo = demo || {};
         };
         return tree;
     };
-    demo.panels.playfulness.finalInit = function (that) {
+    demo.panels.extraTextSize.finalInit = function (that) {
         // the framework does not yet have a declarative way to attach listeners to the modelChanged event
         that.applier.modelChanged.addListener("value", function (newModel, oldModel, request) {
             that.refreshView();
@@ -187,24 +192,24 @@ var demo = demo || {};
     fluid.defaults("demos.customPanels", {
         gradeNames: ["fluid.uiOptions", "autoInit"],
         selectors: {
-            playfulness: ".flc-uiOptions-playfulness"
+            extraTextSize: ".democ-extraTextSize-panel"
         },
         components: {
-            playfulness: {
-                type: "demo.panels.playfulness",
+            extraTextSize: {
+                type: "demo.panels.extraTextSize",
                 createOnEvent: "onUIOptionsMarkupReady",
-                container: "{uiOptions}.dom.playfulness",
+                container: "{uiOptions}.dom.extraTextSize",
                 createOnEvent: "onUIOptionsMarkupReady",
                 options: {
                     gradeNames: "fluid.uiOptions.defaultPanel",
                     rules: {
-                        "playfulness": "value"
+                        "extraTextSize": "value"
                     },
                     model: {
-                        playfulness: "{fluid.uiOptions.rootModel}.rootModel.playfulness"
+                        extraTextSize: "{fluid.uiOptions.rootModel}.rootModel.extraTextSize"
                     },
                     resources: {
-                        template: "{templateLoader}.resources.playfulness"
+                        template: "{templateLoader}.resources.extraTextSize"
                     }
                 }
             }
@@ -214,41 +219,12 @@ var demo = demo || {};
     /**
      * An enactor for adding a class to the body
      */
-    fluid.defaults("demo.enactors.playfulness", {
-        gradeNames: ["fluid.viewComponent", "fluid.uiOptions.enactors", "autoInit"],
-        classes: {
-            "0": "demo-playful-strict",
-            "1": "",
-            "2": "demo-playful-playful"
-        },
-        invokers: {
-            clearClasses: {
-                funcName: "fluid.uiOptions.enactors.classSwapper.clearClasses",
-                args: ["{that}.container", "{that}.classStr"]
-            },
-            swap: {
-                funcName: "fluid.uiOptions.enactors.classSwapper.swap",
-                args: ["{arguments}.0", "{that}"]
-            }
-        },
-        listeners: {
-            onCreate: {
-                listener: "{that}.swap",
-                args: ["{that}.model.value"]
-            }
-        },
-        members: {
-            classStr: {
-                expander: {
-                    func: "fluid.uiOptions.enactors.classSwapper.joinClassStr",
-                    args: "{that}.options.classes"
-                }
-            }
-        }
+    fluid.defaults("demo.enactors.extraTextSize", {
+        gradeNames: ["fluid.viewComponent", "fluid.uiOptions.enactors", "autoInit"]
     });
-    demo.enactors.playfulness.finalInit = function (that) {
+    demo.enactors.extraTextSize.finalInit = function (that) {
         that.applier.modelChanged.addListener("value", function (newModel) {
-            that.swap(newModel.value);
+            console.log("enactor detects new value: " + newModel.value);
         });
     };
 
@@ -258,17 +234,16 @@ var demo = demo || {};
     fluid.defaults("demo.customEnactors", {
         gradeNames: ["fluid.uiEnhancer", "autoInit"],
         components: {
-            playfulness: {
-                type: "demo.enactors.playfulness",
+            extraTextSize: {
+                type: "demo.enactors.extraTextSize",
                 container: "{uiEnhancer}.container",
                 options: {
-                    classes: "{uiEnhancer}.options.classnameMap.playfulness",
                     sourceApplier: "{uiEnhancer}.applier",
                     rules: {
-                        "playfulness": "value"
+                        "extraTextSize": "value"
                     },
                     model: {
-                        value: "{fluid.uiOptions.rootModel}.rootModel.playfulness"
+                        value: "{fluid.uiOptions.rootModel}.rootModel.extraTextSize"
                     }
                 }
             }
@@ -282,7 +257,7 @@ var demo = demo || {};
         gradeNames: ["fluid.uiOptions.rootModel", "autoInit"],
         members: {
             rootModel: {
-                playfulness: "1"
+                extraTextSize: "12"
             }
         }
     });

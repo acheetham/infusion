@@ -28,28 +28,27 @@ var demo = demo || {};
                         "tocTemplate": "../../../components/tableOfContents/html/TableOfContents.html"
                     }
                 },
-                "testPrefStuff": {
-                    "type": "demos.testPref",
+                "extraTextSize": {
+                    "type": "demos.extraTextSize",
                     "enactor": {
-                        "type": "demo.enactors.testPrefEnactor"
+                        "type": "demo.enactors.extraTextSize"
                     },
                     "panel": {
-                        "type": "demo.panels.testPrefPanel",
-                        "container": ".democ-testPref-panel",
-                        "template": "../html/testPrefTemplate.html",
-                        "message": "../messages/test.json"
+                        "type": "demo.panels.extraTextSizePanel",
+                        "container": ".democ-extraTextSize-panel",
+                        "template": "../html/extraTextSizeTemplate.html",
+                        "message": "../messages/customSize.json"
                     }
                 }
             },
             primarySchema: {
-                "demos.testPref": {
+                "demos.extraTextSize": {
                     "type": "string",
                     "default": "12",
                     "minimum": "8",
                     "maximum": "18",
                     "divisibleBy": "1",
-                    // normally wouldn't do this for range, but we've got a dropdown, too
-                    // these are the internal values, not the display strings
+                    // normally wouldn't have enum for range, but we've got a dropdown, too
                     "enum": ["8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18"]
                 }
             }
@@ -70,10 +69,10 @@ var demo = demo || {};
     };
 
 
-    fluid.defaults("demo.panels.testPrefPanel", {
+    fluid.defaults("demo.panels.extraTextSizePanel", {
         gradeNames: ["fluid.uiOptions.panels", "autoInit"],
         preferenceMap: {
-            "demos.testPref": {
+            "demos.extraTextSize": {
                 "model.value": "default",
                 "range.min": "minimum",
                 "range.max": "maximum",
@@ -89,16 +88,16 @@ var demo = demo || {};
             }
         },
         selectors: {
-            sizeSlider: ".flc-uiOptions-sizeSlider",
-            sizeDropdown: ".flc-uiOptions-sizeDropdown",
+            sizeSlider: ".democ-extraTextSize-slider",
+            sizeDropdown: ".democ-extraTextSize-dropdown",
         },
         sliderOptions: {
             orientation: "horizontal",
             step: 1.0
         },
-        produceTree: "demo.panels.testPrefPanel.produceTree"
+        produceTree: "demo.panels.extraTextSizePanel.produceTree"
     });
-    demo.panels.testPrefPanel.produceTree = function (that) {
+    demo.panels.extraTextSizePanel.produceTree = function (that) {
         var sliderOptions = $.extend(true, {}, that.options.sliderOptions, that.model, that.options.range);
 
         // these 'parseInts' are a workaround for the fact that the settings are strings,
@@ -126,22 +125,22 @@ var demo = demo || {};
         };
         return tree;
     };
-    demo.panels.testPrefPanel.finalInit = function (that) {
+    demo.panels.extraTextSizePanel.finalInit = function (that) {
         // the framework does not yet have a declarative way to attach listeners to the modelChanged event
         that.applier.modelChanged.addListener("value", function (newModel, oldModel, request) {
             that.refreshView();
         });
     };
 
-    fluid.defaults("demo.enactors.testPrefEnactor", {
+    fluid.defaults("demo.enactors.extraTextSize", {
         gradeNames: ["fluid.viewComponent", "fluid.uiOptions.enactors", "autoInit"],
         preferenceMap: {
-            "demos.testPref": {
+            "demos.extraTextSize": {
                 "model.value": "default"
             }
         },
     });
-    demo.enactors.testPrefEnactor.finalInit = function (that) {
+    demo.enactors.extraTextSize.finalInit = function (that) {
         that.applier.modelChanged.addListener("value", function (newModel) {
             console.log("enactor detects new value: " + newModel.value);
         });
