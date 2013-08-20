@@ -75,10 +75,10 @@ var demo = demo || {};
         messageLoader: {
             gradeNames: ["fluid.uiOptions.starterMessageLoader"]
         },
-        // Tell UIOptions where to redirect to if the user cancels the operation
         uiOptions: {
             gradeNames: ["fluid.uiOptions.starterPanels", "fluid.uiOptions.rootModel.starter", "demo.rootModel.extras", "fluid.uiOptions.uiEnhancerRelay", "demos.customPanels"],
             listeners: {
+                // Tell UIOptions where to redirect to if the user cancels the operation
                 onCancel: function () {
                     alert("Cancelled - would normally cancel any unsaved changes and return to the previous page.");
                 }
@@ -110,32 +110,14 @@ var demo = demo || {};
         fluid.uiOptions.fullPreview(container, $.extend(true, {}, basicFullPageOpts, previewOps, options));
     };
 
-    fluid.defaults("demos.customPanels", {
-        gradeNames: ["fluid.uiOptions", "autoInit"],
-        selectors: {
-            playfulness: ".flc-uiOptions-playfulness"
-        },
-        components: {
-            playfulness: {
-                type: "demo.panels.playfulness",
-                createOnEvent: "onUIOptionsMarkupReady",
-                container: "{uiOptions}.dom.playfulness",
-                createOnEvent: "onUIOptionsMarkupReady",
-                options: {
-                    gradeNames: "fluid.uiOptions.defaultPanel",
-                    rules: {
-                        "playfulness": "value"
-                    },
-                    model: {
-                        playfulness: "{fluid.uiOptions.rootModel}.rootModel.playfulness"
-                    },
-                    resources: {
-                        template: "{templateLoader}.resources.playfulness"
-                    }
-                }
-            }
-        }
-    });
+/*=======================
+ * Demonstration of creating and adding a custom panel.
+ * Panel has two adjustors, connected to a single preference.
+ * Enactor uses some existing functions
+ ========================*/
+    /**
+     * Grade for specifying template for custom panel, and for overriding the container template
+     */
     fluid.defaults("demo.fullPreviewTemplateLoader", {
         gradeNames: ["fluid.uiOptions.resourceLoader", "autoInit"],
         templates: {
@@ -143,16 +125,17 @@ var demo = demo || {};
             playfulness: "../html/TestTemplate.html"
         }
     });
+
+    /**
+     * Custom panel with two adjustors, a slider and a drop-down, bound to a single preference
+     */
     fluid.defaults("demo.panels.playfulness", {
         gradeNames: ["fluid.uiOptions.panels", "autoInit"],
-        model: {
-            value: "2"
-        },
         strings: {
             size: ["Ruler on the knuckes", "Smile!", "Feather boa"]
         },
         controlValues: {
-            size: ["1", "2", "3"]
+            size: ["0", "1", "2"]
         },
         styles: {
             icon: "fl-icon"
@@ -162,8 +145,8 @@ var demo = demo || {};
             dropdown: ".democ-playfulness-dropdown",
         },
         range: {
-            min: 1,
-            max: 3
+            min: 0,
+            max: 2
         },
         sliderOptions: {
             orientation: "horizontal",
@@ -198,12 +181,45 @@ var demo = demo || {};
             that.refreshView();
         });
     };
+    /**
+     * A grade for adding the custom panel to the interface
+     */
+    fluid.defaults("demos.customPanels", {
+        gradeNames: ["fluid.uiOptions", "autoInit"],
+        selectors: {
+            playfulness: ".flc-uiOptions-playfulness"
+        },
+        components: {
+            playfulness: {
+                type: "demo.panels.playfulness",
+                createOnEvent: "onUIOptionsMarkupReady",
+                container: "{uiOptions}.dom.playfulness",
+                createOnEvent: "onUIOptionsMarkupReady",
+                options: {
+                    gradeNames: "fluid.uiOptions.defaultPanel",
+                    rules: {
+                        "playfulness": "value"
+                    },
+                    model: {
+                        playfulness: "{fluid.uiOptions.rootModel}.rootModel.playfulness"
+                    },
+                    resources: {
+                        template: "{templateLoader}.resources.playfulness"
+                    }
+                }
+            }
+        }
+    });
+
+    /**
+     * An enactor for adding a class to the body
+     */
     fluid.defaults("demo.enactors.playfulness", {
         gradeNames: ["fluid.viewComponent", "fluid.uiOptions.enactors", "autoInit"],
         classes: {
-            "1": "demo-playful-strict",
-            "2": "",
-            "3": "demo-playful-playful"
+            "0": "demo-playful-strict",
+            "1": "",
+            "2": "demo-playful-playful"
         },
         invokers: {
             clearClasses: {
@@ -235,6 +251,10 @@ var demo = demo || {};
             that.swap(newModel.value);
         });
     };
+
+    /**
+     * Grade for adding enactors to enhancer
+     */
     fluid.defaults("demo.customEnactors", {
         gradeNames: ["fluid.uiEnhancer", "autoInit"],
         components: {
@@ -254,14 +274,15 @@ var demo = demo || {};
             }
         }
     });
+
+    /**
+     * Grade for adding custom preference to the root model
+     */
     fluid.defaults("demo.rootModel.extras", {
         gradeNames: ["fluid.uiOptions.rootModel", "autoInit"],
         members: {
-            // TODO: This information is supposed to be generated from the JSON
-            // schema describing various preferences. For now it's kept in top
-            // level uiOptions to avoid further duplication.
             rootModel: {
-                playfulness: "2"
+                playfulness: "1"
             }
         }
     });

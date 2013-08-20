@@ -27,6 +27,30 @@ var demo = demo || {};
                     "enactor": {
                         "tocTemplate": "../../../components/tableOfContents/html/TableOfContents.html"
                     }
+                },
+                "testPrefStuff": {
+                    "type": "demos.testPref",
+                    "enactor": {
+                        "type": "demo.enactors.testPrefEnactor"
+                    },
+                    "panel": {
+                        "type": "demo.panels.testPrefPanel",
+                        "container": ".democ-testPref-panel",
+                        "template": "../html/testPrefTemplate.html",
+                        "message": "../messages/test.json"
+                    }
+                }
+            },
+            primarySchema: {
+                "demos.testPref": {
+                    "type": "string",
+                    "default": "12",
+                    "minimum": "8",
+                    "maximum": "18",
+                    "divisibleBy": "1",
+                    // normally wouldn't do this for range, but we've got a dropdown, too
+                    // these are the internal values, not the display strings
+                    "enum": ["8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18"]
                 }
             }
         });
@@ -38,11 +62,88 @@ var demo = demo || {};
     };
 
     demo.initFullWithPreview = function (container, options) {
-        return demo.initWithSchema(container, options, "fluid.uiOptions.fullPreview", "%prefix/FullPreviewUIOptions.html");
+        return demo.initWithSchema(container, options, "fluid.uiOptions.fullPreview", "../html/FullPreviewUIOptions.html");
     };
 
     demo.initFullNoPreview = function (container, options) {
         return demo.initWithSchema(container, options, "fluid.uiOptions.fullNoPreview", "%prefix/FullNoPreviewUIOptions.html");
     };
 
+
+    fluid.defaults("demo.panels.testPrefPanel", {
+        gradeNames: ["fluid.uiOptions.panels", "autoInit"],
+        preferenceMap: {
+            "demos.testPref": {
+                "model.value": "default",
+                "range.min": "minimum",
+                "range.max": "maximum",
+                "controlValues.size": "enum"
+            }
+        },
+        strings: {
+            size: {
+                expander: {
+                    func: "fluid.uiOptions.panels.lookupMsg",
+                    args: ["{that}.options.parentBundle", "size", "{that}.options.controlValues.size"]
+                }
+            }
+        },
+        selectors: {
+            sizeSlider: ".flc-uiOptions-sizeSlider",
+            sizeDropdown: ".flc-uiOptions-sizeDropdown",
+        },
+        sliderOptions: {
+            orientation: "horizontal",
+            step: 1.0
+        },
+        produceTree: "demo.panels.testPrefPanel.produceTree"
+    });
+    demo.panels.testPrefPanel.produceTree = function (that) {
+        var sliderOptions = $.extend(true, {}, that.options.sliderOptions, that.model, that.options.range);
+
+        // these 'parseInts' are a workaround for the fact that the settings are strings,
+        // but the slider needs integers:
+        sliderOptions.min = parseInt(sliderOptions.min);
+        sliderOptions.max = parseInt(sliderOptions.max);
+        sliderOptions.value = parseInt(sliderOptions.value);
+
+        sliderOptions.slide = function (event, ui) {
+            that.applier.requestChange("value", ui.value.toString());
+        };
+        var tree = {
+            sizeSlider: {
+                decorators: {
+                    type: "jQuery",
+                    func: "slider",
+                    args: [sliderOptions]
+                }
+            },
+            sizeDropdown: {
+                optionnames: "${{that}.options.strings.size}",
+                optionlist: "${{that}.options.controlValues.size}",
+                selection: "${value}"
+            }
+        };
+        return tree;
+    };
+    demo.panels.testPrefPanel.finalInit = function (that) {
+        // the framework does not yet have a declarative way to attach listeners to the modelChanged event
+        that.applier.modelChanged.addListener("value", function (newModel, oldModel, request) {
+            that.refreshView();
+        });
+    };
+
+    fluid.defaults("demo.enactors.testPrefEnactor", {
+        gradeNames: ["fluid.viewComponent", "fluid.uiOptions.enactors", "autoInit"],
+        preferenceMap: {
+            "demos.testPref": {
+                "model.value": "default"
+            }
+        },
+    });
+    demo.enactors.testPrefEnactor.finalInit = function (that) {
+        that.applier.modelChanged.addListener("value", function (newModel) {
+            console.log("enactor detects new value: " + newModel.value);
+        });
+    };
 })(jQuery, fluid);
