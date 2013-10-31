@@ -39,10 +39,10 @@ var learning = learning || {};
         },
         "learning.sliderTest2": {
             "type": "number",
-            "default": 50,
-            "minimum": 10,
-            "maximum": 100,
-            "divisibleBy": 10
+            "default": 25,
+            "minimum": 0,
+            "maximum": 50,
+            "divisibleBy": 5
         },
         "learning.dropdownTest1": {
             "type": "string",
@@ -98,7 +98,6 @@ var learning = learning || {};
                     message: "%prefix/booleanTest2.json"
                 }
             },
-/*
             sliderTest1: {
                 type: "learning.sliderTest1",
                 enactor: {
@@ -123,7 +122,6 @@ var learning = learning || {};
                     message: "%prefix/sliderTest2.json"
                 }
             },
-*/
             dropdownTest1: {
                 type: "learning.dropdownTest1",
                 enactor: {
@@ -180,7 +178,7 @@ var learning = learning || {};
                     "template": "%prefix/composite1.html",
                     "message": "%prefix/composite1.json",
                     "type": "fluid.prefs.panel.composite1",
-                    "panels": ["booleanTest1", "booleanTest2"/*, "sliderTest1", "sliderTest2"*/]
+                    "panels": ["booleanTest1", "booleanTest2", "sliderTest1", "sliderTest2"]
                 },
                 composite2: {
                     "container": ".flc-prefsEditor-compositePanel2",
