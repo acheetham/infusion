@@ -149,7 +149,7 @@ var fluid_1_5 = fluid_1_5 || {};
         repeatingSelectors: [],
         events: {
             initSubPanels: null,
-            subPanelAfterRender: null,
+            subPanelAfterRender: null
         },
         listeners: {
             "onCreate.combineResources": "{that}.combineResources",
@@ -358,7 +358,7 @@ var fluid_1_5 = fluid_1_5 || {};
     fluid.prefs.compositePanel.produceTree = function (that) {
         var produceTreeOption = that.options.produceTree;
         var ownTree = produceTreeOption ?
-            (typeof(produceTreeOption) === "string" ? fluid.getGlobalValue(produceTreeOption) : produceTreeOption) (that) :
+            (typeof (produceTreeOption) === "string" ? fluid.getGlobalValue(produceTreeOption) : produceTreeOption)(that) :
             that.expandProtoTree();
         var subPanelTree = that.produceSubPanelTrees();
         var tree = {
@@ -411,16 +411,10 @@ var fluid_1_5 = fluid_1_5 || {};
      ****************************************/
 
     fluid.defaults("fluid.prefs.textfieldSlider", {
-        gradeNames: ["fluid.textfieldSlider", "autoInit"],
+        gradeNames: ["fluid.textfieldSlider", "fluid.prefs.modelRelay", "autoInit"],
         model: "{fluid.prefs.panel}.model",
+        sourceApplier: "{fluid.prefs.panel}.applier",
         range: "{fluid.prefs.panel}.options.range",
-        listeners: {
-            modelChanged: {
-                listener: "{fluid.prefs.panel}.applier.requestChange",
-                args: ["{that}.options.path", "{arguments}.0"]
-            }
-        },
-        path: "value",
         sliderOptions: "{fluid.prefs.panel}.options.sliderOptions"
     });
 
@@ -462,7 +456,12 @@ var fluid_1_5 = fluid_1_5 || {};
             textSize: {
                 decorators: {
                     type: "fluid",
-                    func: "fluid.prefs.textfieldSlider"
+                    func: "fluid.prefs.textfieldSlider",
+                    options: {
+                        rules: {
+                            "value": "value"
+                        }
+                    }
                 }
             }
         },
@@ -554,7 +553,12 @@ var fluid_1_5 = fluid_1_5 || {};
             lineSpace: {
                 decorators: {
                     type: "fluid",
-                    func: "fluid.prefs.textfieldSlider"
+                    func: "fluid.prefs.textfieldSlider",
+                    options: {
+                        rules: {
+                            "value": "value"
+                        }
+                    }
                 }
             }
         },
