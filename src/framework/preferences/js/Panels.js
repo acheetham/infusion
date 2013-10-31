@@ -87,6 +87,12 @@ var fluid_1_5 = fluid_1_5 || {};
                 args: ["{that}.options.preferenceMap"]
             }
         },
+        model: {
+            expander: {
+                func: "fluid.prefs.subPanel.getInitialModel",
+                args: ["{compositePanel}.model", "{that}.options.preferenceMap"]
+            }
+        },
         invokers: {
             refreshView: "{compositePanel}.refreshView"
         },
@@ -115,6 +121,18 @@ var fluid_1_5 = fluid_1_5 || {};
             });
         });
         return rules;
+    };
+
+    fluid.prefs.subPanel.getInitialModel = function (parentModel, preferenceMap) {
+        var initialModel = {};
+        fluid.each(preferenceMap, function (prefObj, prefKey) {
+            $.each(prefObj, function (prefRule) {
+                if (prefRule.indexOf("model.") === 0) {
+                    fluid.set(initialModel, prefRule.slice(6), fluid.get(parentModel, fluid.prefs.subPanel.safePrefKey(prefKey)));
+                }
+            });
+        });
+        return initialModel;
     };
 
     /**********************************
@@ -301,6 +319,10 @@ var fluid_1_5 = fluid_1_5 || {};
         return memberName + "_" + value;
     };
 
+    fluid.prefs.compositePanel.rebaseParentRelativeID = function (val, memberName) {
+        return val.slice(0, 4) + fluid.prefs.compositePanel.rebaseID(val.slice(4), memberName);
+    };
+
     fluid.prefs.compositePanel.rebaseValueBinding = function (value, modelRelayRules) {
         return fluid.find(modelRelayRules, function (oldModelPath, newModelPath) {
             if (value === oldModelPath) {
@@ -317,8 +339,12 @@ var fluid_1_5 = fluid_1_5 || {};
                 return fluid.transform(val, function (v) {
                     return fluid.prefs.compositePanel.rebaseTree(v, memberName, modelRelayRules);
                 });
+            } else if (key === "selection") {
+                return fluid.prefs.compositePanel.rebaseTree(val, memberName, modelRelayRules);
             } else if (key === "ID") {
                 return fluid.prefs.compositePanel.rebaseID(val, memberName);
+            } else if (key === "parentRelativeID") {
+                return fluid.prefs.compositePanel.rebaseParentRelativeID(val, memberName);
             } else if (key === "valuebinding") {
                 return fluid.prefs.compositePanel.rebaseValueBinding(val, modelRelayRules);
             } else {
