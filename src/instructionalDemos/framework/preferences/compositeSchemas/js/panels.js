@@ -199,7 +199,7 @@ var learning = learning || {};
             label: ".flc-prefsEditor-contrast-label"
         },
         stringArrayIndex: {
-            radioTestStrings: ["radioTestKey-yes", "radioTestKey-no", "radioTestKey-maybe", "radioTestKey-sometimes"]
+            radioTestStrings: ["radioTestKey-never", "radioTestKey-occasionally", "radioTestKey-regularly", "radioTestKey-always"]
         },
         repeatingSelectors: ["frequencyRow"],
         protoTree: {

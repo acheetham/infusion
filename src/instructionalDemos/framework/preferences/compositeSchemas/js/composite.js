@@ -56,8 +56,8 @@ var learning = learning || {};
         },
         "learning.radioTest1": {
             "type": "string",
-            "default": "sometimes",
-            "enum": ["never", "sometimes", "regularly", "always"]
+            "default": "occasionally",
+            "enum": ["never", "occasionally", "regularly", "always"]
         },
         "learning.radioTest2": {
             "type": "string",
@@ -110,6 +110,7 @@ var learning = learning || {};
                     message: "%prefix/sliderTest1.json"
                 }
             },
+/*
             sliderTest2: {
                 type: "learning.sliderTest2",
                 enactor: {
@@ -122,6 +123,7 @@ var learning = learning || {};
                     message: "%prefix/sliderTest2.json"
                 }
             },
+*/
             dropdownTest1: {
                 type: "learning.dropdownTest1",
                 enactor: {
@@ -146,7 +148,6 @@ var learning = learning || {};
                     message: "%prefix/dropdownTest2.json"
                 }
             },
-/*
             radioTest1: {
                 type: "learning.radioTest1",
                 enactor: {
@@ -171,21 +172,20 @@ var learning = learning || {};
                     message: "%prefix/radioTest2.json"
                 }
             },
-*/
             groups: {
                 composite1: {
                     "container": ".flc-prefsEditor-compositePanel1",
                     "template": "%prefix/composite1.html",
                     "message": "%prefix/composite1.json",
                     "type": "fluid.prefs.panel.composite1",
-                    "panels": ["booleanTest1", "booleanTest2", "sliderTest1", "sliderTest2"]
+                    "panels": ["booleanTest1", "booleanTest2", "sliderTest1"/*, "sliderTest2"*/]
                 },
                 composite2: {
                     "container": ".flc-prefsEditor-compositePanel2",
                     "template": "%prefix/composite2.html",
                     "message": "%prefix/composite2.json",
                     "type": "fluid.prefs.panel.composite2",
-                    "panels": ["dropdownTest1", "dropdownTest2"/*, "radioTest1", "radioTest2"*/]
+                    "panels": ["dropdownTest1", "dropdownTest2", "radioTest1", "radioTest2"]
                 }
             }
         }

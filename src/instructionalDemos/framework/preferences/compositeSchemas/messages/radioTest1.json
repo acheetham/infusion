@@ -1,6 +1,6 @@
 {
-    "radioTestKey-never": "Yes", 
-    "radioTestKey-sometimes": "No", 
-    "radioTestKey-regularly": "Maybe", 
-    "radioTestKey-always": "Sometimes..."
+    "radioTestKey-never": "Never",
+    "radioTestKey-occasionally": "Occasionally",
+    "radioTestKey-regularly": "Regularly",
+    "radioTestKey-always": "Always"
 }
