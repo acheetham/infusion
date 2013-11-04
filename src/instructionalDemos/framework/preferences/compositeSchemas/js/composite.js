@@ -22,47 +22,65 @@ var learning = learning || {};
      * Primary Schema
      */
     learning.primarySchema = {
-        "learning.booleanTest1": {
+        "learning.boolean1": {
             "type": "boolean",
             "default": false
         },
-        "learning.booleanTest2": {
+        "learning.boolean2": {
             "type": "boolean",
             "default": true
         },
-        "learning.sliderTest1": {
+        "learning.booleanTest3": {
+            "type": "boolean",
+            "default": true
+        },
+        "learning.slider1": {
             "type": "number",
             "default": 2,
             "minimum": 1,
             "maximum": 5,
             "divisibleBy": 1
         },
-        "learning.sliderTest2": {
+        "learning.slider2": {
             "type": "number",
             "default": 25,
             "minimum": 0,
             "maximum": 50,
             "divisibleBy": 5
         },
-        "learning.dropdownTest1": {
+        "learning.dropdown1": {
             "type": "string",
             "default": "kl",
             "enum": ["en", "kl", "bj", "rm", "cd"]
         },
-        "learning.dropdownTest2": {
+        "learning.dropdown2": {
             "type": "string",
             "default": "three",
             "enum": ["one", "two", "three", "go"]
         },
-        "learning.radioTest1": {
+        "learning.dropdown3": {
+            "type": "string",
+            "default": "enterprise",
+            "enum": ["adelphi", "enterprise", "bozeman"]
+        },
+        "learning.radio1": {
             "type": "string",
             "default": "occasionally",
             "enum": ["never", "occasionally", "regularly", "always"]
         },
-        "learning.radioTest2": {
+        "learning.radio2": {
             "type": "string",
             "default": "maybe",
             "enum": ["yes", "no", "maybe", "sometimes"]
+        },
+        "learning.radio3": {
+            "type": "string",
+            "default": "captain",
+            "enum": ["ensign", "lieutenant", "commander", "captain", "admiral"]
+        },
+        "learning.check1": {
+            "type": "boolean",
+            "default": true
         }
     };
 
@@ -74,102 +92,147 @@ var learning = learning || {};
         auxiliarySchema: {
             template: "%prefix/compositePrefsEditor.html",
             message: "%prefix/prefsEditor.json",
-            booleanTest1: {
-                type: "learning.booleanTest1",
+            boolean1: {
+                type: "learning.boolean1",
                 enactor: {
-                    type: "learning.enactors.booleanTest1"
+                    type: "learning.enactors.boolean1"
                 },
                 panel: {
-                    type: "learning.panels.booleanTest1",
-                    container: ".flc-prefsEditor-composite1-booleanTest1",
+                    type: "learning.panels.boolean1",
+                    container: ".flc-prefsEditor-composite1-boolean1",
                     template: "%prefix/boolean-template.html",
-                    message: "%prefix/booleanTest1.json"
+                    message: "%prefix/boolean1.json"
                 }
             },
-            booleanTest2: {
-                type: "learning.booleanTest2",
+            boolean2: {
+                type: "learning.boolean2",
                 enactor: {
-                    type: "learning.enactors.booleanTest2"
+                    type: "learning.enactors.boolean2"
                 },
                 panel: {
-                    type: "learning.panels.booleanTest2",
-                    container: ".flc-prefsEditor-composite1-booleanTest2",
+                    type: "learning.panels.boolean2",
+                    container: ".flc-prefsEditor-composite1-boolean2",
                     template: "%prefix/boolean-template2.html",
-                    message: "%prefix/booleanTest2.json"
+                    message: "%prefix/boolean2.json"
                 }
             },
-            sliderTest1: {
-                type: "learning.sliderTest1",
+/*
+            boolean3: {
+                type: "learning.boolean3",
                 enactor: {
-                    type: "learning.enactors.sliderTest1"
+                    type: "learning.enactors.boolean3"
                 },
                 panel: {
-                    type: "learning.panels.sliderTest1",
-                    container: ".flc-prefsEditor-composite1-sliderTest1",
+                    type: "learning.panels.sub1",
+                    container: ".flc-prefsEditor-composite3-sub2",
+                    template: "%prefix/sub2-template.html",
+                    message: "%prefix/sub2.json"
+                }
+            },
+            check1: {
+                type: "learning.check1",
+                enactor: {
+                    type: "learning.enactors.check1"
+                },
+                panel: {
+                    type: "learning.panels.sub1"
+                }
+            },
+*/
+            slider1: {
+                type: "learning.slider1",
+                enactor: {
+                    type: "learning.enactors.slider1"
+                },
+                panel: {
+                    type: "learning.panels.slider1",
+                    container: ".flc-prefsEditor-composite1-slider1",
                     template: "%prefix/slider-template.html",
-                    message: "%prefix/sliderTest1.json"
+                    message: "%prefix/slider1.json"
+                }
+            },
+            slider2: {
+                type: "learning.slider2",
+                enactor: {
+                    type: "learning.enactors.slider2"
+                },
+                panel: {
+                    type: "learning.panels.slider2",
+                    container: ".flc-prefsEditor-composite1-slider2",
+                    template: "%prefix/slider-template.html",
+                    message: "%prefix/slider2.json"
                 }
             },
 
-            sliderTest2: {
-                type: "learning.sliderTest2",
+            dropdown1: {
+                type: "learning.dropdown1",
                 enactor: {
-                    type: "learning.enactors.sliderTest2"
+                    type: "learning.enactors.dropdown1"
                 },
                 panel: {
-                    type: "learning.panels.sliderTest2",
-                    container: ".flc-prefsEditor-composite1-sliderTest2",
-                    template: "%prefix/slider-template.html",
-                    message: "%prefix/sliderTest2.json"
-                }
-            },
-
-            dropdownTest1: {
-                type: "learning.dropdownTest1",
-                enactor: {
-                    type: "learning.enactors.dropdownTest1"
-                },
-                panel: {
-                    type: "learning.panels.dropdownTest1",
-                    container: ".flc-prefsEditor-composite2-dropdownTest1",
+                    type: "learning.panels.dropdown1",
+                    container: ".flc-prefsEditor-composite2-dropdown1",
                     template: "%prefix/dropdown-template.html",
-                    message: "%prefix/dropdownTest1.json"
+                    message: "%prefix/dropdown1.json"
                 }
             },
-            dropdownTest2: {
-                type: "learning.dropdownTest2",
+            dropdown2: {
+                type: "learning.dropdown2",
                 enactor: {
-                    type: "learning.enactors.dropdownTest2"
+                    type: "learning.enactors.dropdown2"
                 },
                 panel: {
-                    type: "learning.panels.dropdownTest2",
-                    container: ".flc-prefsEditor-composite2-dropdownTest2",
+                    type: "learning.panels.dropdown2",
+                    container: ".flc-prefsEditor-composite2-dropdown2",
                     template: "%prefix/dropdown-template.html",
-                    message: "%prefix/dropdownTest2.json"
+                    message: "%prefix/dropdown2.json"
                 }
             },
-            radioTest1: {
-                type: "learning.radioTest1",
+/*
+            dropdown3: {
+                type: "learning.dropdown3",
                 enactor: {
-                    type: "learning.enactors.radioTest1"
+                    type: "learning.enactors.dropdown3"
                 },
                 panel: {
-                    type: "learning.panels.radioTest1",
-                    container: ".flc-prefsEditor-composite2-radioTest1",
-                    template: "%prefix/radio-template.html",
-                    message: "%prefix/radioTest1.json"
+                    type: "learning.panels.sub2",
+                    container: ".flc-prefsEditor-composite3-sub1",
+                    template: "%prefix/sub1-template.html",
+                    message: "%prefix/sub1.json"
                 }
             },
-            radioTest2: {
-                type: "learning.radioTest2",
+            radio3: {
+                type: "learning.radio3",
                 enactor: {
-                    type: "learning.enactors.radioTest2"
+                    type: "learning.enactors.radio3"
                 },
                 panel: {
-                    type: "learning.panels.radioTest2",
-                    container: ".flc-prefsEditor-composite2-radioTest2",
+                    type: "learning.panels.sub2"
+                }
+            },
+*/
+            radio1: {
+                type: "learning.radio1",
+                enactor: {
+                    type: "learning.enactors.radio1"
+                },
+                panel: {
+                    type: "learning.panels.radio1",
+                    container: ".flc-prefsEditor-composite2-radio1",
                     template: "%prefix/radio-template.html",
-                    message: "%prefix/radioTest2.json"
+                    message: "%prefix/radio1.json"
+                }
+            },
+            radio2: {
+                type: "learning.radio2",
+                enactor: {
+                    type: "learning.enactors.radio2"
+                },
+                panel: {
+                    type: "learning.panels.radio2",
+                    container: ".flc-prefsEditor-composite2-radio2",
+                    template: "%prefix/radio-template.html",
+                    message: "%prefix/radio2.json"
                 }
             },
             groups: {
@@ -178,14 +241,23 @@ var learning = learning || {};
                     "template": "%prefix/composite1.html",
                     "message": "%prefix/composite1.json",
                     "type": "fluid.prefs.panel.composite1",
-                    "panels": ["booleanTest1", "booleanTest2", "sliderTest1", "sliderTest2"]
+                    "panels": ["boolean1", "boolean2", "slider1", "slider2"]
                 },
                 composite2: {
                     "container": ".flc-prefsEditor-compositePanel2",
                     "template": "%prefix/composite2.html",
                     "message": "%prefix/composite2.json",
                     "type": "fluid.prefs.panel.composite2",
-                    "panels": ["dropdownTest1", "dropdownTest2", "radioTest1", "radioTest2"]
+                    "panels": ["dropdown1", "dropdown2", "radio1", "radio2"]
+/*
+                },
+                composite3: {
+                    container: ".flc-prefsEditor-compositePanel3",
+                    "template": "%prefix/composite3.html",
+                    "message": "%prefix/composite3.json",
+                    "type": "fluid.prefs.panel.composite3",
+                    "panels": ["sub1", "sub2"]
+*/
                 }
             }
         }
@@ -210,6 +282,15 @@ var learning = learning || {};
         },
         protoTree: {
             label: {messagekey: "composite2Label"}
+        }
+    });
+    fluid.defaults("fluid.prefs.panel.composite3", {
+        gradeNames: ["fluid.prefs.compositePanel", "autoInit"],
+        selectors: {
+            label: ".flc-prefsEditor-composite3-label"
+        },
+        protoTree: {
+            label: {messagekey: "composite3Label"}
         }
     });
 

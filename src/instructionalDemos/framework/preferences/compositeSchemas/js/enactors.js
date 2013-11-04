@@ -23,125 +23,168 @@ var learning = learning || {};
     /**
      * 
      */
-    fluid.defaults("learning.enactors.booleanTest1", {
+    fluid.defaults("learning.enactors.boolean1", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
         preferenceMap: {
-            "learning.booleanTest1": {
+            "learning.boolean1": {
                 "model.boolVal": "default"
             }
         }
     });
-    learning.enactors.booleanTest1.finalInit = function (that) {
+    learning.enactors.boolean1.finalInit = function (that) {
         that.applier.modelChanged.addListener("boolVal", function (newModel) {
-            console.log("booleanTest1 enactor model changed to "+newModel.boolVal, that);
+            console.log("boolean1 enactor model changed to "+newModel.boolVal, that);
         });
     };
-    fluid.defaults("learning.enactors.booleanTest2", {
+    fluid.defaults("learning.enactors.boolean2", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
         preferenceMap: {
-            "learning.booleanTest2": {
+            "learning.boolean2": {
                 "model.boolVal": "default"
             }
         }
     });
-    learning.enactors.booleanTest2.finalInit = function (that) {
+    learning.enactors.boolean2.finalInit = function (that) {
         that.applier.modelChanged.addListener("boolVal", function (newModel) {
-            console.log("booleanTest2 enactor model changed to "+newModel.boolVal, that);
+            console.log("boolean2 enactor model changed to "+newModel.boolVal, that);
         });
     };
+    fluid.defaults("learning.enactors.boolean3", {
+        gradeNames: ["fluid.prefs.enactor", "autoInit"],
+        preferenceMap: {
+            "learning.boolean3": {
+                "model.boolVal": "default"
+            }
+        }
+    });
 
     /**
      * 
      */
-    fluid.defaults("learning.enactors.sliderTest1", {
+    fluid.defaults("learning.enactors.slider1", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
         preferenceMap: {
-            "learning.sliderTest1": {
+            "learning.slider1": {
                 // because of FLUID-5190, this must be "value" (for textfieldSlider only)
                 "model.value": "default"
             }
         }
     });
-    learning.enactors.sliderTest1.finalInit = function (that) {
+    learning.enactors.slider1.finalInit = function (that) {
         that.applier.modelChanged.addListener("value", function (newModel) {
-            console.log("sliderTest1 enactor model changed to "+newModel.value, that);
+            console.log("slider1 enactor model changed to "+newModel.value, that);
         });
     };
 
-    fluid.defaults("learning.enactors.sliderTest2", {
+    fluid.defaults("learning.enactors.slider2", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
         preferenceMap: {
-            "learning.sliderTest2": {
+            "learning.slider2": {
                 "model.value": "default"
             }
         }
     });
-    learning.enactors.sliderTest2.finalInit = function (that) {
+    learning.enactors.slider2.finalInit = function (that) {
         that.applier.modelChanged.addListener("value", function (newModel) {
-            console.log("sliderTest2 enactor model changed to "+newModel.value, that);
+            console.log("slider2 enactor model changed to "+newModel.value, that);
         });
     };
 
     /**
      * 
      */
-    fluid.defaults("learning.enactors.dropdownTest1", {
+    fluid.defaults("learning.enactors.dropdown1", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
         preferenceMap: {
-            "learning.dropdownTest1": {
+            "learning.dropdown1": {
                 "model.ddVal": "default"
             }
         }
     });
-    learning.enactors.dropdownTest1.finalInit = function (that) {
+    learning.enactors.dropdown1.finalInit = function (that) {
         that.applier.modelChanged.addListener("ddVal", function (newModel) {
-            console.log("dropdownTest1 enactor model changed to "+newModel.ddVal, that);
+            console.log("dropdown1 enactor model changed to "+newModel.ddVal, that);
         });
     };
 
-    fluid.defaults("learning.enactors.dropdownTest2", {
+    fluid.defaults("learning.enactors.dropdown2", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
         preferenceMap: {
-            "learning.dropdownTest2": {
+            "learning.dropdown2": {
                 "model.ddVal": "default"
             }
         }
     });
-    learning.enactors.dropdownTest2.finalInit = function (that) {
+    learning.enactors.dropdown2.finalInit = function (that) {
         that.applier.modelChanged.addListener("ddVal", function (newModel) {
-            console.log("dropdownTest2 enactor model changed to "+newModel.ddVal, that);
+            console.log("dropdown2 enactor model changed to "+newModel.ddVal, that);
         });
     };
+    fluid.defaults("learning.enactors.dropdown3", {
+        gradeNames: ["fluid.prefs.enactor", "autoInit"],
+        preferenceMap: {
+            "learning.dropdown3": {
+                "model.ddVal": "default"
+            }
+        }
+    });
 
     /**
      * 
      */
-    fluid.defaults("learning.enactors.radioTest1", {
+    fluid.defaults("learning.enactors.radio1", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
         preferenceMap: {
-            "learning.radioTest1": {
+            "learning.radio1": {
                 "model.radioVal": "default"
             }
         }
     });
-    learning.enactors.radioTest1.finalInit = function (that) {
+    learning.enactors.radio1.finalInit = function (that) {
         that.applier.modelChanged.addListener("radioVal", function (newModel) {
-            console.log("radioTest1 enactor model changed to "+newModel.radioVal, that);
+            console.log("radio1 enactor model changed to "+newModel.radioVal, that);
         });
     };
 
-    fluid.defaults("learning.enactors.radioTest2", {
+    fluid.defaults("learning.enactors.radio2", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
         preferenceMap: {
-            "learning.radioTest2": {
+            "learning.radio2": {
                 "model.radioVal": "default"
             }
         }
     });
-    learning.enactors.radioTest2.finalInit = function (that) {
+    learning.enactors.radio2.finalInit = function (that) {
         that.applier.modelChanged.addListener("radioVal", function (newModel) {
-            console.log("radioTest2 enactor model changed to "+newModel.radioVal, that);
+            console.log("radio2 enactor model changed to "+newModel.radioVal, that);
         });
+    };
+
+    fluid.defaults("learning.enactors.radio3", {
+        gradeNames: ["fluid.prefs.enactor", "autoInit"],
+        preferenceMap: {
+            "learning.radio3": {
+                "model.radioVal": "default"
+            }
+        }
+    });
+    
+    fluid.defaults("learning.enactors.check1", {
+        gradeNames: ["fluid.prefs.enactor", "autoInit"],
+        preferenceMap: {
+            "learning.check1": {
+                "model.checkVal": "default"
+            }
+        },
+        modelListeners: {
+            "checkVal": {
+                funcName: "learning.enactors.check1.log",
+                args: ["{that}", "{change}.value"]
+            }  
+        },
+    });
+    learning.enactors.check1.log = function (that, changeVal) {
+        console.log("check1 enactor: "+changeVal);
     };
 
 })(jQuery, fluid);
