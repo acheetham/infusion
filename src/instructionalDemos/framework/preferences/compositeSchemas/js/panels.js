@@ -90,7 +90,16 @@ var learning = learning || {};
                 decorators: {
                     type: "fluid",
                     // the fluid.prefs.textfieldSlider is a fluid.textfieldSlider that pulls the model and range from <???>
-                    func: "fluid.prefs.textfieldSlider"
+                    func: "fluid.prefs.textfieldSlider",
+                    options: {
+                        rules: {
+                            "value": "value"
+                        },
+                        model: "{learning.panels.sliderTest1}.model",
+                        sourceApplier: "{learning.panels.sliderTest1}.applier",
+                        range: "{learning.panels.sliderTest1}.options.range",
+                        sliderOptions: "{learning.panels.sliderTest1}.options.sliderOptions"
+                    }
                 }
             }
         }
@@ -122,7 +131,16 @@ var learning = learning || {};
                 decorators: {
                     type: "fluid",
                     // the fluid.prefs.textfieldSlider is a fluid.textfieldSlider that pulls the model and range from <???>
-                    func: "fluid.prefs.textfieldSlider"
+                    func: "fluid.prefs.textfieldSlider",
+                    options: {
+                        rules: {
+                            "value": "value"
+                        },
+                        model: "{learning.panels.sliderTest2}.model",
+                        sourceApplier: "{learning.panels.sliderTest2}.applier",
+                        range: "{learning.panels.sliderTest2}.options.range",
+                        sliderOptions: "{learning.panels.sliderTest2}.options.sliderOptions"
+                    }
                 }
             }
         }

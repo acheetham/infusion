@@ -110,7 +110,7 @@ var learning = learning || {};
                     message: "%prefix/sliderTest1.json"
                 }
             },
-/*
+
             sliderTest2: {
                 type: "learning.sliderTest2",
                 enactor: {
@@ -123,7 +123,7 @@ var learning = learning || {};
                     message: "%prefix/sliderTest2.json"
                 }
             },
-*/
+
             dropdownTest1: {
                 type: "learning.dropdownTest1",
                 enactor: {
@@ -178,7 +178,7 @@ var learning = learning || {};
                     "template": "%prefix/composite1.html",
                     "message": "%prefix/composite1.json",
                     "type": "fluid.prefs.panel.composite1",
-                    "panels": ["booleanTest1", "booleanTest2", "sliderTest1"/*, "sliderTest2"*/]
+                    "panels": ["booleanTest1", "booleanTest2", "sliderTest1", "sliderTest2"]
                 },
                 composite2: {
                     "container": ".flc-prefsEditor-compositePanel2",
