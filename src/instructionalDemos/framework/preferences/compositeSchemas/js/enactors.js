@@ -10,7 +10,7 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
 */
 
 // Declare dependencies
-/*global demo:true, fluid, jQuery, window*/
+/*global demo:true, fluid, jQuery, window, console*/
 
 // JSLint options
 /*jslint white: true, funcinvoke: true, undef: true, newcap: true, nomen: true, regexp: true, bitwise: true, browser: true, forin: true, maxerr: 100, indent: 4 */
@@ -29,26 +29,29 @@ var learning = learning || {};
             "learning.boolean1": {
                 "model.boolVal": "default"
             }
+        },
+        modelListeners: {
+            "boolVal": {
+                funcName: "learning.enactors.logModelValue",
+                args: ["boolean1", "{change}.value"]
+            }
         }
     });
-    learning.enactors.boolean1.finalInit = function (that) {
-        that.applier.modelChanged.addListener("boolVal", function (newModel) {
-            console.log("boolean1 enactor model changed to "+newModel.boolVal, that);
-        });
-    };
+
     fluid.defaults("learning.enactors.boolean2", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
         preferenceMap: {
             "learning.boolean2": {
                 "model.boolVal": "default"
             }
+        },
+        modelListeners: {
+            "boolVal": {
+                funcName: "learning.enactors.logModelValue",
+                args: ["boolean2", "{change}.value"]
+            }
         }
     });
-    learning.enactors.boolean2.finalInit = function (that) {
-        that.applier.modelChanged.addListener("boolVal", function (newModel) {
-            console.log("boolean2 enactor model changed to "+newModel.boolVal, that);
-        });
-    };
 
     /**
      * 
@@ -60,13 +63,14 @@ var learning = learning || {};
                 // because of FLUID-5190, this must be "value" (for textfieldSlider only)
                 "model.value": "default"
             }
+        },
+        modelListeners: {
+            "value": {
+                funcName: "learning.enactors.logModelValue",
+                args: ["slider1", "{change}.value"]
+            }
         }
     });
-    learning.enactors.slider1.finalInit = function (that) {
-        that.applier.modelChanged.addListener("value", function (newModel) {
-            console.log("slider1 enactor model changed to "+newModel.value, that);
-        });
-    };
 
     fluid.defaults("learning.enactors.slider2", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
@@ -74,13 +78,14 @@ var learning = learning || {};
             "learning.slider2": {
                 "model.value": "default"
             }
+        },
+        modelListeners: {
+            "value": {
+                funcName: "learning.enactors.logModelValue",
+                args: ["slider2", "{change}.value"]
+            }
         }
     });
-    learning.enactors.slider2.finalInit = function (that) {
-        that.applier.modelChanged.addListener("value", function (newModel) {
-            console.log("slider2 enactor model changed to "+newModel.value, that);
-        });
-    };
 
     /**
      * 
@@ -91,13 +96,14 @@ var learning = learning || {};
             "learning.dropdown1": {
                 "model.ddVal": "default"
             }
+        },
+        modelListeners: {
+            "ddVal": {
+                funcName: "learning.enactors.logModelValue",
+                args: ["dropdown1", "{change}.value"]
+            }
         }
     });
-    learning.enactors.dropdown1.finalInit = function (that) {
-        that.applier.modelChanged.addListener("ddVal", function (newModel) {
-            console.log("dropdown1 enactor model changed to "+newModel.ddVal, that);
-        });
-    };
 
     fluid.defaults("learning.enactors.dropdown2", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
@@ -105,13 +111,14 @@ var learning = learning || {};
             "learning.dropdown2": {
                 "model.ddVal": "default"
             }
+        },
+        modelListeners: {
+            "ddVal": {
+                funcName: "learning.enactors.logModelValue",
+                args: ["dropdown2", "{change}.value"]
+            }
         }
     });
-    learning.enactors.dropdown2.finalInit = function (that) {
-        that.applier.modelChanged.addListener("ddVal", function (newModel) {
-            console.log("dropdown2 enactor model changed to "+newModel.ddVal, that);
-        });
-    };
 
     /**
      * 
@@ -122,13 +129,14 @@ var learning = learning || {};
             "learning.radio1": {
                 "model.radioVal": "default"
             }
+        },
+        modelListeners: {
+            "radio1": {
+                funcName: "learning.enactors.logModelValue",
+                args: ["radio1", "{change}.value"]
+            }
         }
     });
-    learning.enactors.radio1.finalInit = function (that) {
-        that.applier.modelChanged.addListener("radioVal", function (newModel) {
-            console.log("radio1 enactor model changed to "+newModel.radioVal, that);
-        });
-    };
 
     fluid.defaults("learning.enactors.radio2", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
@@ -136,13 +144,14 @@ var learning = learning || {};
             "learning.radio2": {
                 "model.radioVal": "default"
             }
+        },
+        modelListeners: {
+            "radio2": {
+                funcName: "learning.enactors.logModelValue",
+                args: ["radio2", "{change}.value"]
+            }
         }
     });
-    learning.enactors.radio2.finalInit = function (that) {
-        that.applier.modelChanged.addListener("radioVal", function (newModel) {
-            console.log("radio2 enactor model changed to "+newModel.radioVal, that);
-        });
-    };
     
     fluid.defaults("learning.enactors.check1", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
@@ -152,14 +161,15 @@ var learning = learning || {};
             }
         },
         modelListeners: {
-            "checkVal": {
-                funcName: "learning.enactors.check1.log",
-                args: ["{that}", "{change}.value"]
-            }  
-        },
+            "check1": {
+                funcName: "learning.enactors.logModelValue",
+                args: ["check1", "{change}.value"]
+            }
+        }
     });
-    learning.enactors.check1.log = function (that, changeVal) {
-        console.log("check1 enactor model changed to: "+changeVal);
+
+    learning.enactors.logModelValue = function (name, changeVal) {
+        console.log(name + " model changed to: " + changeVal);
     };
 
 })(jQuery, fluid);
