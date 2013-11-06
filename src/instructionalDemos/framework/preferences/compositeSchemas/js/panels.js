@@ -60,24 +60,6 @@ var learning = learning || {};
             bool: "${boolVal}"
         }
     });
-    fluid.defaults("learning.panels.boolean3", {
-        gradeNames: ["fluid.prefs.panel", "autoInit"],
-        preferenceMap: {
-            "learning.boolean3": {
-                "model.boolVal": "default"
-            }
-        },
-        selectors: {
-            bool: ".flc-prefsEditor-booleanTest",
-            label: ".flc-prefsEditor-booleanTest-label",
-            choiceLabel: ".flc-prefsEditor-booleanTest-choice-label"
-        },
-        protoTree: {
-            label: {messagekey: "booleanTest"},
-            choiceLabel: {messagekey: "booleanTestLabel3"},
-            bool: "${boolVal}"
-        }
-    });
 
     /**
      * 
@@ -113,10 +95,10 @@ var learning = learning || {};
                         rules: {
                             "value": "value"
                         },
-                        model: "{learning.panels.sliderTest1}.model",
-                        sourceApplier: "{learning.panels.sliderTest1}.applier",
-                        range: "{learning.panels.sliderTest1}.options.range",
-                        sliderOptions: "{learning.panels.sliderTest1}.options.sliderOptions"
+                        model: "{learning.panels.slider1}.model",
+                        sourceApplier: "{learning.panels.slider1}.applier",
+                        range: "{learning.panels.slider1}.options.range",
+                        sliderOptions: "{learning.panels.slider1}.options.sliderOptions"
                     }
                 }
             }
@@ -154,10 +136,10 @@ var learning = learning || {};
                         rules: {
                             "value": "value"
                         },
-                        model: "{learning.panels.sliderTest2}.model",
-                        sourceApplier: "{learning.panels.sliderTest2}.applier",
-                        range: "{learning.panels.sliderTest2}.options.range",
-                        sliderOptions: "{learning.panels.sliderTest2}.options.sliderOptions"
+                        model: "{learning.panels.slider2}.model",
+                        sourceApplier: "{learning.panels.slider2}.applier",
+                        range: "{learning.panels.slider2}.options.range",
+                        sliderOptions: "{learning.panels.slider2}.options.sliderOptions"
                     }
                 }
             }
@@ -206,30 +188,6 @@ var learning = learning || {};
         },
         stringArrayIndex: {
             dd: ["dropdownTest-one", "dropdownTest-two", "dropdownTest-three", "dropdownTest-go"]
-        },
-        protoTree: {
-            label: {messagekey: "labelkey"},
-            textFont: {
-                optionnames: "${{that}.stringBundle.dd}",
-                optionlist: "${{that}.options.controlValues.ddStrings}",
-                selection: "${ddVal}"
-            }
-        }
-    });
-    fluid.defaults("learning.panels.dropdown3", {
-        gradeNames: ["fluid.prefs.panel", "autoInit"],
-        preferenceMap: {
-            "learning.dropdown3": {
-                "model.ddVal": "default",
-                "controlValues.ddStrings": "enum"
-            }
-        },
-        selectors: {
-            textFont: ".flc-prefsEditor-text-font",
-            label: ".flc-prefsEditor-text-font-label"
-        },
-        stringArrayIndex: {
-            dd: ["dropdownTest-adelphi", "dropdownTest-enterprise", "dropdownTest-bozeman"]
         },
         protoTree: {
             label: {messagekey: "labelkey"},
@@ -314,38 +272,20 @@ var learning = learning || {};
         }
     });
 
-    fluid.defaults("learning.panels.radio3", {
+    fluid.defaults("learning.panels.check1", {
         gradeNames: ["fluid.prefs.panel", "autoInit"],
         preferenceMap: {
-            "learning.radio3": {
-                "model.radioVal": "default",
-                "controlValues.radioStrings": "enum"
+            "learning.check1": {
+                "model.checkVal": "default"
             }
         },
         selectors: {
-            frequencyRow: ".flc-prefsEditor-frequencyRow",
-            frequencyLabel: ".flc-prefsEditor-frequency-label",
-            frequencyInput: ".flc-prefsEditor-frequencyInput",
-            label: ".flc-prefsEditor-contrast-label"
+            check: ".flc-prefsEditor-check",
+            checkLabel: ".flc-prefsEditor-check-choice-label",
         },
-        stringArrayIndex: {
-            radioTestStrings: ["radio3-ensign", "radio3-lieutenant", "radio3-commander", "radio3-captain", "radio3-admiral"]
-        },
-        repeatingSelectors: ["frequencyRow"],
         protoTree: {
-            label: {messagekey: "radioTestLabelKey"},
-            expander: {
-                type: "fluid.renderer.selection.inputs",
-                rowID: "frequencyRow",
-                labelID: "frequencyLabel",
-                inputID: "frequencyInput",
-                selectID: "frequency-radio",
-                tree: {
-                    optionnames: "${{that}.stringBundle.radioTestStrings}",
-                    optionlist: "${{that}.options.controlValues.radioStrings}",
-                    selection: "${radioVal}"
-                }
-            }
+            checkLabel: {messagekey: "checkboxLabel"},
+            check: "${checkVal}"
         }
     });
 

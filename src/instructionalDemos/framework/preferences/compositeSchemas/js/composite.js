@@ -30,10 +30,6 @@ var learning = learning || {};
             "type": "boolean",
             "default": true
         },
-        "learning.booleanTest3": {
-            "type": "boolean",
-            "default": true
-        },
         "learning.slider1": {
             "type": "number",
             "default": 2,
@@ -58,11 +54,6 @@ var learning = learning || {};
             "default": "three",
             "enum": ["one", "two", "three", "go"]
         },
-        "learning.dropdown3": {
-            "type": "string",
-            "default": "enterprise",
-            "enum": ["adelphi", "enterprise", "bozeman"]
-        },
         "learning.radio1": {
             "type": "string",
             "default": "occasionally",
@@ -72,11 +63,6 @@ var learning = learning || {};
             "type": "string",
             "default": "maybe",
             "enum": ["yes", "no", "maybe", "sometimes"]
-        },
-        "learning.radio3": {
-            "type": "string",
-            "default": "captain",
-            "enum": ["ensign", "lieutenant", "commander", "captain", "admiral"]
         },
         "learning.check1": {
             "type": "boolean",
@@ -116,29 +102,18 @@ var learning = learning || {};
                     message: "%prefix/boolean2.json"
                 }
             },
-/*
-            boolean3: {
-                type: "learning.boolean3",
-                enactor: {
-                    type: "learning.enactors.boolean3"
-                },
-                panel: {
-                    type: "learning.panels.sub1",
-                    container: ".flc-prefsEditor-composite3-sub2",
-                    template: "%prefix/sub2-template.html",
-                    message: "%prefix/sub2.json"
-                }
-            },
             check1: {
                 type: "learning.check1",
                 enactor: {
                     type: "learning.enactors.check1"
                 },
                 panel: {
-                    type: "learning.panels.sub1"
+                    type: "learning.panels.check1",
+                    container: ".flc-prefsEditor-composite1-check1",
+                    template: "%prefix/check1-template.html",
+                    message: "%prefix/check1.json"
                 }
             },
-*/
             slider1: {
                 type: "learning.slider1",
                 enactor: {
@@ -163,7 +138,6 @@ var learning = learning || {};
                     message: "%prefix/slider2.json"
                 }
             },
-
             dropdown1: {
                 type: "learning.dropdown1",
                 enactor: {
@@ -189,25 +163,11 @@ var learning = learning || {};
                 }
             },
 /*
-            dropdown3: {
-                type: "learning.dropdown3",
-                enactor: {
-                    type: "learning.enactors.dropdown3"
-                },
-                panel: {
-                    type: "learning.panels.sub2",
-                    container: ".flc-prefsEditor-composite3-sub1",
-                    template: "%prefix/sub1-template.html",
-                    message: "%prefix/sub1.json"
-                }
-            },
-            radio3: {
+ this might be how to have multiple enactors
+            radio3foo: {
                 type: "learning.radio3",
                 enactor: {
-                    type: "learning.enactors.radio3"
-                },
-                panel: {
-                    type: "learning.panels.sub2"
+                    type: "learning.enactors.radio3-2"
                 }
             },
 */
@@ -240,24 +200,15 @@ var learning = learning || {};
                     "container": ".flc-prefsEditor-compositePanel1",
                     "template": "%prefix/composite1.html",
                     "message": "%prefix/composite1.json",
-                    "type": "fluid.prefs.panel.composite1",
-                    "panels": ["boolean1", "boolean2", "slider1", "slider2"]
+                    "type": "learning.panels.composite1",
+                    "panels": ["boolean1", "boolean2", "check1", "slider1", "slider2"]
                 },
                 composite2: {
                     "container": ".flc-prefsEditor-compositePanel2",
                     "template": "%prefix/composite2.html",
                     "message": "%prefix/composite2.json",
-                    "type": "fluid.prefs.panel.composite2",
+                    "type": "learning.panels.composite2",
                     "panels": ["dropdown1", "dropdown2", "radio1", "radio2"]
-/*
-                },
-                composite3: {
-                    container: ".flc-prefsEditor-compositePanel3",
-                    "template": "%prefix/composite3.html",
-                    "message": "%prefix/composite3.json",
-                    "type": "fluid.prefs.panel.composite3",
-                    "panels": ["sub1", "sub2"]
-*/
                 }
             }
         }
@@ -266,7 +217,7 @@ var learning = learning || {};
     /**
      * Composite Panels
      */
-    fluid.defaults("fluid.prefs.panel.composite1", {
+    fluid.defaults("learning.panels.composite1", {
         gradeNames: ["fluid.prefs.compositePanel", "autoInit"],
         selectors: {
             label: ".flc-prefsEditor-composite1-label"
@@ -275,7 +226,7 @@ var learning = learning || {};
             label: {messagekey: "composite1Label"}
         }
     });
-    fluid.defaults("fluid.prefs.panel.composite2", {
+    fluid.defaults("learning.panels.composite2", {
         gradeNames: ["fluid.prefs.compositePanel", "autoInit"],
         selectors: {
             label: ".flc-prefsEditor-composite2-label"
@@ -284,7 +235,7 @@ var learning = learning || {};
             label: {messagekey: "composite2Label"}
         }
     });
-    fluid.defaults("fluid.prefs.panel.composite3", {
+    fluid.defaults("learning.panels.composite3", {
         gradeNames: ["fluid.prefs.compositePanel", "autoInit"],
         selectors: {
             label: ".flc-prefsEditor-composite3-label"

@@ -49,14 +49,6 @@ var learning = learning || {};
             console.log("boolean2 enactor model changed to "+newModel.boolVal, that);
         });
     };
-    fluid.defaults("learning.enactors.boolean3", {
-        gradeNames: ["fluid.prefs.enactor", "autoInit"],
-        preferenceMap: {
-            "learning.boolean3": {
-                "model.boolVal": "default"
-            }
-        }
-    });
 
     /**
      * 
@@ -120,14 +112,6 @@ var learning = learning || {};
             console.log("dropdown2 enactor model changed to "+newModel.ddVal, that);
         });
     };
-    fluid.defaults("learning.enactors.dropdown3", {
-        gradeNames: ["fluid.prefs.enactor", "autoInit"],
-        preferenceMap: {
-            "learning.dropdown3": {
-                "model.ddVal": "default"
-            }
-        }
-    });
 
     /**
      * 
@@ -159,15 +143,6 @@ var learning = learning || {};
             console.log("radio2 enactor model changed to "+newModel.radioVal, that);
         });
     };
-
-    fluid.defaults("learning.enactors.radio3", {
-        gradeNames: ["fluid.prefs.enactor", "autoInit"],
-        preferenceMap: {
-            "learning.radio3": {
-                "model.radioVal": "default"
-            }
-        }
-    });
     
     fluid.defaults("learning.enactors.check1", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
@@ -184,7 +159,7 @@ var learning = learning || {};
         },
     });
     learning.enactors.check1.log = function (that, changeVal) {
-        console.log("check1 enactor: "+changeVal);
+        console.log("check1 enactor model changed to: "+changeVal);
     };
 
 })(jQuery, fluid);
