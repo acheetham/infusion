@@ -78,7 +78,7 @@ var learning = learning || {};
         auxiliarySchema: {
             template: "%prefix/compositePrefsEditor.html",
             message: "%prefix/prefsEditor.json",
-            boolean1: {
+            booleanPref1: {
                 type: "learning.boolean1",
                 enactor: {
                     type: "learning.enactors.boolean1"
@@ -90,7 +90,7 @@ var learning = learning || {};
                     message: "%prefix/boolean1.json"
                 }
             },
-            boolean2: {
+            booleanPref2: {
                 type: "learning.boolean2",
                 enactor: {
                     type: "learning.enactors.boolean2"
@@ -102,7 +102,7 @@ var learning = learning || {};
                     message: "%prefix/boolean2.json"
                 }
             },
-            check1: {
+            checkMark1: {
                 type: "learning.check1",
                 enactor: {
                     type: "learning.enactors.check1"
@@ -114,7 +114,7 @@ var learning = learning || {};
                     message: "%prefix/check1.json"
                 }
             },
-            slider1: {
+            sliderControl1: {
                 type: "learning.slider1",
                 enactor: {
                     type: "learning.enactors.slider1"
@@ -126,7 +126,7 @@ var learning = learning || {};
                     message: "%prefix/slider1.json"
                 }
             },
-            slider2: {
+            sliderControl2: {
                 type: "learning.slider2",
                 enactor: {
                     type: "learning.enactors.slider2"
@@ -138,7 +138,7 @@ var learning = learning || {};
                     message: "%prefix/slider2.json"
                 }
             },
-            dropdown1: {
+            dd1: {
                 type: "learning.dropdown1",
                 enactor: {
                     type: "learning.enactors.dropdown1"
@@ -150,7 +150,7 @@ var learning = learning || {};
                     message: "%prefix/dropdown1.json"
                 }
             },
-            dropdown2: {
+            dd2: {
                 type: "learning.dropdown2",
                 enactor: {
                     type: "learning.enactors.dropdown2"
@@ -171,7 +171,7 @@ var learning = learning || {};
                 }
             },
 */
-            radio1: {
+            radioButtons1: {
                 type: "learning.radio1",
                 enactor: {
                     type: "learning.enactors.radio1"
@@ -183,7 +183,7 @@ var learning = learning || {};
                     message: "%prefix/radio1.json"
                 }
             },
-            radio2: {
+            radioButtons2: {
                 type: "learning.radio2",
                 enactor: {
                     type: "learning.enactors.radio2"
@@ -201,14 +201,14 @@ var learning = learning || {};
                     "template": "%prefix/composite1.html",
                     "message": "%prefix/composite1.json",
                     "type": "learning.panels.composite1",
-                    "panels": ["boolean1", "boolean2", "check1", "slider1", "slider2"]
+                    "panels": ["booleanPref1", "booleanPref2", "checkMark1", "sliderControl1", "sliderControl2"]
                 },
                 composite2: {
                     "container": ".flc-prefsEditor-compositePanel2",
                     "template": "%prefix/composite2.html",
                     "message": "%prefix/composite2.json",
                     "type": "learning.panels.composite2",
-                    "panels": ["dropdown1", "dropdown2", "radio1", "radio2"]
+                    "panels": ["dd1", "dd2", "radioButtons1", "radioButtons2"]
                 }
             }
         }
