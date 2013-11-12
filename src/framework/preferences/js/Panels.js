@@ -140,7 +140,7 @@ var fluid_1_5 = fluid_1_5 || {};
      **********************************/
 
     fluid.defaults("fluid.prefs.compositePanel", {
-        gradeNames: ["fluid.prefs.panel", "autoInit", "{that}.getDistributeOptionsGrade"],
+        gradeNames: ["fluid.prefs.panel", "autoInit", "{that}.getDistributeOptionsGrade", "{that}.getSubPanelLifecycleBindings"],
         mergePolicy: {
             subPanelOverrides: "noexpand"
         },
@@ -148,6 +148,7 @@ var fluid_1_5 = fluid_1_5 || {};
         selectorsToIgnore: [], // should match the selectors that are used to identify the containers for the subpanels
         repeatingSelectors: [],
         events: {
+            onRefreshView: null,
             initSubPanels: null,
             subPanelAfterRender: null
         },
@@ -159,8 +160,11 @@ var fluid_1_5 = fluid_1_5 || {};
                 "args": ["{that}.options.resources.template.resourceText"]
             },
             "onCreate.initSubPanels": "{that}.events.initSubPanels",
+            "onCreate.hideInactive": "{that}.hideInactive",
             "onCreate.surfaceSubpanelRendererSelectors": "{that}.surfaceSubpanelRendererSelectors",
+            "onRefreshView.surfaceSubpanelRendererSelectors": "{that}.surfaceSubpanelRendererSelectors",
             "afterRender.initSubPanels": "{that}.events.initSubPanels",
+            "afterRender.hideInactive": "{that}.hideInactive",
             "afterRender.subPanelRelay": {
                 listener: "{that}.events.subPanelAfterRender",
                 priority: "last"
@@ -169,6 +173,10 @@ var fluid_1_5 = fluid_1_5 || {};
         invokers: {
             getDistributeOptionsGrade: {
                 funcName: "fluid.prefs.compositePanel.assembleDistributeOptions",
+                args: ["{that}.options.components"]
+            },
+            getSubPanelLifecycleBindings: {
+                funcName: "fluid.prefs.compositePanel.subPanelLifecycleBindings",
                 args: ["{that}.options.components"]
             },
             combineResources: {
@@ -190,6 +198,21 @@ var fluid_1_5 = fluid_1_5 || {};
             produceTree: {
                 funcName: "fluid.prefs.compositePanel.produceTree",
                 args: ["{that}"]
+            },
+            hideInactive: {
+                funcName: "fluid.prefs.compositePanel.hideInactive",
+                args: ["{that}"]
+            },
+            handleRenderOnPreference: {
+                funcName: "fluid.prefs.compositePanel.handleRenderOnPreference",
+                args: ["{that}", "{arguments}.0", "{arguments}.1", "{arguments}.2"]
+            },
+            conditionalCreateEvent: {
+                funcName: "fluid.prefs.compositePanel.conditionalCreateEvent",
+            },
+            refreshView: {
+                funcName: "fluid.prefs.compositePanel.refreshView",
+                args: ["{that}"]
             }
         },
         subPanelOverrides: {
@@ -206,7 +229,7 @@ var fluid_1_5 = fluid_1_5 || {};
             }
         },
         components: {},
-        resources: {} // template is reserved for the compositePanel's template, the subpanel template should have same key as the selector for its container.
+        resources: {}, // template is reserved for the compositePanel's template, the subpanel template should have same key as the selector for its container.
     });
 
     /*
@@ -231,11 +254,16 @@ var fluid_1_5 = fluid_1_5 || {};
         return comp && fluid.hasGrade(comp.options, "fluid.prefs.panel");
     };
 
+    fluid.prefs.compositePanel.refreshView = function (that) {
+        that.events.onRefreshView.fire(that);
+        fluid.rendererComponent.refreshView(that);
+    };
+
     /*
      * Creates a grade containing the distributeOptions rules needed for the subcomponents
      */
     fluid.prefs.compositePanel.assembleDistributeOptions = function (components) {
-        var gradeName = "fluid.prefs.compositePanel.distributeOptions";
+        var gradeName = "fluid.prefs.compositePanel.distributeOptions_" + fluid.allocateGuid();
         var distributeRules = [];
         $.each(components, function (componentName, componentOptions) {
             if (fluid.prefs.compositePanel.isPanel(componentOptions.type, componentOptions.options)) {
@@ -252,6 +280,99 @@ var fluid_1_5 = fluid_1_5 || {};
         });
 
         return gradeName;
+    };
+
+    fluid.prefs.compositePanel.conditionalCreateEvent = function (value, createEvent) {
+        if (value) {
+            createEvent();
+        }
+    };
+
+
+    fluid.prefs.compositePanel.handleRenderOnPreference = function (that, value, createEvent, componentName) {
+        var comp = that[componentName];
+        that.conditionalCreateEvent(value, createEvent);
+        if (!value && comp) {
+            comp.destroy();
+        }
+        that.refreshView();
+    };
+
+    /*
+     * Creates a grade containing all of the lifecycle binding configuration needed for the subpanels.
+     * This includes the following:
+     * - adding events used to trigger the initialization of the subpanels
+     * - adding the createOnEvent configuration for the subpanels
+     * - binding handlers to model changed events
+     * - binding handlers to afterRender and onCreate
+     */
+    fluid.prefs.compositePanel.subPanelLifecycleBindings = function (components) {
+        var gradeName = "fluid.prefs.compositePanel.subPanelCreationTimingDistibution_" + fluid.allocateGuid();
+        var distributeOptions = [];
+        var subPanelCreationOpts = {
+            "default": "initSubPanels"
+        };
+        var modelListeners = {};
+        var listeners = {};
+        var events = {};
+        $.each(components, function (componentName, componentOptions) {
+            if (fluid.prefs.compositePanel.isPanel(componentOptions.type, componentOptions.options)) {
+                var creationEventOpt = "default";
+                // would have had renderOnPreference directly sourced from the componentOptions
+                // however, the set of configuration specified there is restricted.
+                var renderOnPreference = fluid.get(componentOptions, "options.renderOnPreference");
+                if (renderOnPreference) {
+                    var pref = fluid.prefs.subPanel.safePrefKey(renderOnPreference);
+                    var afterRenderListener = "afterRender." + pref;
+                    var onCreateListener = "onCreate." + pref;
+                    creationEventOpt = "initOn_" + pref;
+                    var listenerOpts = {
+                        listener: "{that}.conditionalCreateEvent",
+                        args: ["{that}.model." + pref, "{that}.events." + creationEventOpt + ".fire"]
+                    };
+                    subPanelCreationOpts[creationEventOpt] = creationEventOpt;
+                    events[creationEventOpt] = null;
+                    modelListeners[pref] = modelListeners[pref] || [];
+                    modelListeners[pref].push({
+                        func: "{that}.handleRenderOnPreference",
+                        args: ["{change}.value", "{that}.events." + creationEventOpt + ".fire", componentName]
+                    });
+                    listeners[afterRenderListener] = listenerOpts;
+                    listeners[onCreateListener] = listenerOpts;
+                }
+                distributeOptions.push({
+                    source: "{that}.options.subPanelCreationOpts." + creationEventOpt,
+                    target: "{that}.options.components." + componentName + ".createOnEvent"
+                });
+            }
+        });
+
+        fluid.defaults(gradeName, {
+            gradeNames: ["fluid.eventedComponent", "autoInit"],
+            events: events,
+            listeners: listeners,
+            modelListeners: modelListeners,
+            subPanelCreationOpts: subPanelCreationOpts,
+            distributeOptions: distributeOptions
+        });
+        return gradeName;
+    };
+
+    /*
+     * Used to hide the containers of inactive sub panels.
+     * This is necessary as the composite panel's template is the one that has their containers and
+     * it would be undesirable to have them visible when their associated panel has not been created.
+     * Also, hiding them allows for the subpanel to initialize, as it requires their container to be present.
+     * The subpanels need to be initialized before rendering, for the produce function to source the rendering
+     * information from it.
+     */
+    fluid.prefs.compositePanel.hideInactive = function (that) {
+        fluid.each(that.options.components, function (componentOpts, componentName) {
+            var comp = that[componentName];
+            if(fluid.prefs.compositePanel.isPanel(componentOpts.type, componentOpts.options) && !fluid.prefs.compositePanel.isActivePanel(that[componentName])) {
+                that.locate(componentName).hide();
+            }
+        });
     };
 
     /*

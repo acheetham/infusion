@@ -104,7 +104,7 @@ var fluid_1_5 = fluid_1_5 || {};
                 fluid.set(opts, key, value);
             }
         });
-    
+
         if (typeObject) {
             $.extend(true, root[path], $.extend(true, typeObject, opts));
         }
@@ -216,9 +216,10 @@ var fluid_1_5 = fluid_1_5 || {};
         return expandedSchema;
     };
 
-    fluid.prefs.expandCompositePanels = function (auxSchema, compositePanelList, panelIndex, compositePanelCommonOptions, subPanelCommonOptions, 
+    fluid.prefs.expandCompositePanels = function (auxSchema, compositePanelList, panelIndex, compositePanelCommonOptions, subPanelCommonOptions,
         compositePanelBasedOnSubCommonOptions, mappedDefaults) {
         var type = "panel";
+        var alwaysFlag = "always";
         var panelsToIgnore = [];
 
         fluid.each(compositePanelList, function (compositeDetail, compositeKey) {
@@ -238,17 +239,38 @@ var fluid_1_5 = fluid_1_5 || {};
             templates = fluid.prefs.rearrangeDirect(thisCompositeOptions, compositeKey, "template");
             messages = fluid.prefs.rearrangeDirect(thisCompositeOptions, compositeKey, "message");
 
+            var subPanelList = []; // list of subpanels to generate options for
             var subPanels = {};
+            var subPanelRenderOn = {};
 
-            fluid.each(thisCompositeOptions.panels, function (subPanelID) {
+            // panels can contain an array of always on panels, or an object
+            // describing which panels are always and which are initialized by a preference value
+            if (!fluid.isPrimitive(thisCompositeOptions.panels)) {
+                fluid.each(thisCompositeOptions.panels, function (subpanelArray, pref) {
+                    subPanelList = subPanelList.concat(subpanelArray);
+                    if (pref !== alwaysFlag) {
+                        fluid.each(subpanelArray, function (onePanel) {
+                            fluid.set(subPanelRenderOn, onePanel, pref);
+                        });
+                    }
+                });
+            } else {
+                subPanelList = thisCompositeOptions.panels;
+            }
+
+            fluid.each(subPanelList, function (subPanelID) {
                 panelsToIgnore.push(subPanelID);
                 var subPanelPrefsKey = fluid.get(auxSchema, [subPanelID, "type"]);
                 var safeSubPanelPrefsKey = fluid.prefs.subPanel.safePrefKey(subPanelPrefsKey);
                 selectorsToIgnore.push(safeSubPanelPrefsKey);
 
                 var actualSubPanel = fluid.get(auxSchema, [subPanelID, "panel", "type"]);
-                
+
                 fluid.set(subPanels, [safeSubPanelPrefsKey, "type"], actualSubPanel);
+                var renderOn = fluid.get(subPanelRenderOn, subPanelID);
+                if (renderOn) {
+                    fluid.set(subPanels, [safeSubPanelPrefsKey, "renderOnPreference"], renderOn);
+                }
 
                 // Deal with preferenceMap related options
                 var map = fluid.defaults(actualSubPanel).preferenceMap[subPanelPrefsKey];
@@ -316,8 +338,8 @@ var fluid_1_5 = fluid_1_5 || {};
 
         var compositePanelList = fluid.get(auxSchema, "groups");
         if (compositePanelList) {
-            fluid.prefs.expandCompositePanels(auxSchema, compositePanelList, fluid.get(indexes, "panel"), 
-                fluid.get(elementCommonOptions, "compositePanel"), fluid.get(elementCommonOptions, "subPanel"), 
+            fluid.prefs.expandCompositePanels(auxSchema, compositePanelList, fluid.get(indexes, "panel"),
+                fluid.get(elementCommonOptions, "compositePanel"), fluid.get(elementCommonOptions, "subPanel"),
                 fluid.get(elementCommonOptions, "compositePanelBasedOnSub"), mappedDefaults);
         }
 
@@ -415,7 +437,6 @@ var fluid_1_5 = fluid_1_5 || {};
                 "%subPrefKey": "{templateLoader}.resources.%subPrefKey"
             },
             subPanel: {
-                "createOnEvent": "initSubPanels",
                 "container": "{%compositePanel}.dom.%prefKey"
             },
             enactor: {
