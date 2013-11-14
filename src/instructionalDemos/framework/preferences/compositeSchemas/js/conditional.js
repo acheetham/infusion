@@ -93,7 +93,22 @@ var learning = learning || {};
                         "always": ["incSize"],
                         "learning.increaseSize": ["cursor", "magFactor", "magPos"]
                     }
+/*
+                },
+                speakIncrease: {
+                    "container": ".mpe-speakIncrease",
+                    "template": "%prefix/speakIncrease.html",
+                    "message": "%prefix/speakIncrease.json",
+                    "type": "learning.panels.speakIncrease",
+                    "panels": {
+                        "always": ["speak", "incSize"],
+                        "learning.speakText": ["vol", "wpm"],
+                        "learning.increaseSize": ["cursor", "magFactor", "magPos"]
+                    }
+*/
                 }
+                // to try: more than one "always", with different dependencies for both, e.g. combine these two into a single panel?
+                // also to try: the 'old' format for panels i.e. just an array of panel names, if there are no conditional panels relevant
             },
             speak: {
                 type: "learning.speakText",
@@ -196,6 +211,17 @@ var learning = learning || {};
             label: {messagekey: "increasingHeader"}
         }
     });
+/*
+    fluid.defaults("learning.panels.speakIncrease", {
+        gradeNames: ["fluid.prefs.compositePanel", "autoInit"],
+        selectors: {
+            label: ".mpe-speakIncrease-header"
+        },
+        protoTree: {
+            label: {messagekey: "speakIncreaseHeader"}
+        }
+    });
+*/
 
     /**
      * Subpanels
@@ -415,7 +441,7 @@ var learning = learning || {};
     fluid.defaults("learning.enactors.speak", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
         preferenceMap: {
-            "learning.speak": {
+            "learning.speakText": {
                 "model.speak": "default"
             }
         },
