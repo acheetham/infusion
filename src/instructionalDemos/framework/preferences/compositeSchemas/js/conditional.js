@@ -74,6 +74,7 @@ var learning = learning || {};
             template: "%prefix/conditionalPrefsEditor.html",
             message: "%prefix/conditionalPrefsEditor.json",
             groups: {
+/*
                 speaking: {
                     "container": ".mpe-speaking",
                     "template": "%prefix/speaking.html",
@@ -93,8 +94,8 @@ var learning = learning || {};
                         "always": ["incSize"],
                         "learning.increaseSize": ["cursor", "magFactor", "magPos"]
                     }
-/*
                 },
+*/
                 speakIncrease: {
                     "container": ".mpe-speakIncrease",
                     "template": "%prefix/speakIncrease.html",
@@ -105,10 +106,9 @@ var learning = learning || {};
                         "learning.speakText": ["vol", "wpm"],
                         "learning.increaseSize": ["cursor", "magFactor", "magPos"]
                     }
-*/
+                    // also to try: the 'old' format for panels i.e. just an array of panel names, if there are no conditional panels relevant
+//                    "panels": ["speak", "incSize", "vol", "wpm", "cursor", "magFactor", "magPos"]
                 }
-                // to try: more than one "always", with different dependencies for both, e.g. combine these two into a single panel?
-                // also to try: the 'old' format for panels i.e. just an array of panel names, if there are no conditional panels relevant
             },
             speak: {
                 type: "learning.speakText",
@@ -193,6 +193,7 @@ var learning = learning || {};
     /**
      * Composite Panels
      */
+/*
     fluid.defaults("learning.panels.speaking", {
         gradeNames: ["fluid.prefs.compositePanel", "autoInit"],
         selectors: {
@@ -211,7 +212,7 @@ var learning = learning || {};
             label: {messagekey: "increasingHeader"}
         }
     });
-/*
+*/
     fluid.defaults("learning.panels.speakIncrease", {
         gradeNames: ["fluid.prefs.compositePanel", "autoInit"],
         selectors: {
@@ -221,7 +222,6 @@ var learning = learning || {};
             label: {messagekey: "speakIncreaseHeader"}
         }
     });
-*/
 
     /**
      * Subpanels
