@@ -60,7 +60,7 @@ var learning = learning || {};
         },
         "learning.magnifierPosition": {
             "type": "string",
-            "default": "0",
+            "default": "left",
             "enum": ["centre", "left", "right", "top", "bottom"]
         }
     };
@@ -162,7 +162,7 @@ var learning = learning || {};
                 panel: {
                     type: "learning.panels.cursor",
                     container: ".mpe-increasing-cursor",
-                    template: "%prefix/slider-template.html"
+                    template: "%prefix/slide-template.html"
                 }
             },
             magFactor: {
@@ -335,7 +335,7 @@ var learning = learning || {};
     fluid.defaults("learning.panels.cursor", {
         gradeNames: ["fluid.prefs.panel", "autoInit"],
         preferenceMap: {
-            "learning.volume": {
+            "learning.cursorSize": {
                 // because of FLUID-5190, this must be "value" (for textfieldSlider only)
                 "model.value": "default",
                 "range.min": "minimum",
@@ -496,25 +496,10 @@ var learning = learning || {};
             }
         }
     });
-    fluid.defaults("learning.enactors.mag", {
-        gradeNames: ["fluid.prefs.enactor", "autoInit"],
-        preferenceMap: {
-            "learning.magnification": {
-                // because of FLUID-5190, this must be "value" (for textfieldSlider only)
-                "model.value": "default"
-            }
-        },
-        modelListeners: {
-            "value": {
-                funcName: "learning.enactors.logModelValue",
-                args: ["mag", "{change}.value"]
-            }
-        }
-    });
     fluid.defaults("learning.enactors.cursor", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
         preferenceMap: {
-            "learning.magnification": {
+            "learning.cursorSize": {
                 // because of FLUID-5190, this must be "value" (for textfieldSlider only)
                 "model.value": "default"
             }
