@@ -185,10 +185,6 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
             afterRender: {
                 listener: "{that}.writeRecord",
                 args: ["compositePanel"]
-            },
-            onRefreshView: {
-                listener: "{that}.writeRecord",
-                args: ["onRefreshView"]
             }
         },
         protoTree: {
@@ -240,7 +236,6 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
 
         var expectedFireRecord = {
             compositePanel: 3,
-            onRefreshView: 3,
             subPanel1: 3,
             subPanel2: 3
         };
@@ -310,6 +305,16 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
             jqUnit.assertFalse("The container for " + panelName + " should not be visible", that.locate(panelName).is(":visible"));
         };
 
+        var assertText = function (that, panelName, expected) {
+            var actual = that[panelName].locate("text").text();
+            jqUnit.assertEquals("The text for " + panelName + " should have rendered correctly", expected, actual);
+        };
+
+        var assertChecked = function (that, panelName, expected) {
+            var actual = that[panelName].locate("input").is(":checked");
+            jqUnit.assertEquals("The value for " + panelName + " should have rendered correctly", expected, actual);
+        };
+
         var assertSubPanelLifecycleBindings = function (that, componentName, preference) {
             var pref = fluid.prefs.subPanel.safePrefKey(preference);
             var initEvent = "initOn_" + pref;
@@ -331,6 +336,16 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
                 conditionalPanel2: ".conditionalPanel2",
             },
             selectorsToIgnore: ["alwaysPanel1", "alwaysPanel2", "conditionalPanel1", "conditionalPanel2"],
+            model: {
+                some_pref_1: false,
+                some_pref_2: false,
+                some_pref_3: false,
+                some_pref_4: false
+            },
+            strings: {
+                text1: "conditionalPanel1",
+                text2: "conditionalPanel2",
+            },
             components: {
                 alwaysPanel1: {
                     type: "fluid.prefs.panel",
@@ -345,12 +360,10 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
                             text: "alwaysPanel1",
                         },
                         selectors: {
-                            text: ".text"
+                            input: ".input"
                         },
                         protoTree: {
-                            text: {
-                                messagekey: "text"
-                            }
+                            input: "${value}"
                         }
                     }
                 },
@@ -367,12 +380,10 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
                             text: "alwaysPanel2",
                         },
                         selectors: {
-                            text: ".text"
+                            input: ".input"
                         },
                         protoTree: {
-                            text: {
-                                messagekey: "text"
-                            }
+                            input: "${value}"
                         }
                     }
                 },
@@ -387,14 +398,14 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
                             }
                         },
                         strings: {
-                            text: "conditionalPanel1",
+                            text1: "conditionalPanel1",
                         },
                         selectors: {
                             text: ".text"
                         },
                         protoTree: {
                             text: {
-                                messagekey: "text"
+                                messagekey: "text1"
                             }
                         }
                     }
@@ -410,28 +421,28 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
                             }
                         },
                         strings: {
-                            text: "conditionalPanel2",
+                            text2: "conditionalPanel2",
                         },
                         selectors: {
                             text: ".text"
                         },
                         protoTree: {
                             text: {
-                                messagekey: "text"
+                                messagekey: "text2"
                             }
                         }
                     }
-                }
+                },
             },
             resources: {
                 template: {
                     resourceText: '<div class="alwaysPanel1"></div><div class="conditionalPanel1"></div><div class="alwaysPanel2"></div><div class="conditionalPanel2"></div>'
                 },
                 alwaysPanel1: {
-                    resourceText: '<span class="text"></span>'
+                    resourceText: '<input type="checkbox" class="input" />'
                 },
                 alwaysPanel2: {
-                    resourceText: '<span class="text"></span>'
+                    resourceText: '<input type="checkbox" class="input" />'
                 },
                 conditionalPanel1: {
                     resourceText: '<span class="text"></span>'
@@ -443,6 +454,7 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         });
 
         // component creation
+        jqUnit.expect(20);
         assertInitialized(that, "alwaysPanel1");
         jqUnit.assertEquals("The createOnEvent for alwaysPanel1 should be set", "initSubPanels", fluid.get(that, "options.components.alwaysPanel1.createOnEvent"));
         assertInitialized(that, "alwaysPanel2");
@@ -453,39 +465,71 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         assertSubPanelLifecycleBindings(that, "conditionalPanel2", "some.pref.2");
 
         // first rendering
+        jqUnit.expect(10);
+        that.events.afterRender.addListener(function () {
+            assertInitialized(that, "alwaysPanel1");
+            assertChecked(that, "alwaysPanel1", false);
+            assertInitialized(that, "alwaysPanel2");
+            assertChecked(that, "alwaysPanel2", false);
+            assertNotInitialized(that, "conditionalPanel1");
+            assertNotInitialized(that, "conditionalPanel2");
+            that.events.afterRender.removeListener("initial");
+        }, "initial", null, "last");
         that.refreshView();
-        assertInitialized(that, "alwaysPanel1");
-        assertInitialized(that, "alwaysPanel2");
-        assertNotInitialized(that, "conditionalPanel1");
-        assertNotInitialized(that, "conditionalPanel2");
 
-        // set some.prefs.1 to true
+        // set some.pref.1 to true
+        jqUnit.expect(11);
+        that.events.afterRender.addListener(function () {
+            assertInitialized(that, "alwaysPanel1");
+            assertChecked(that, "alwaysPanel1", true);
+            assertInitialized(that, "alwaysPanel2");
+            assertChecked(that, "alwaysPanel2", false);
+            assertInitialized(that, "conditionalPanel1");
+            assertText(that, "conditionalPanel1", "conditionalPanel1");
+            assertNotInitialized(that, "conditionalPanel2");
+            that.events.afterRender.removeListener("pref1_true");
+        }, "pref1_true", null, "last");
         that.applier.requestChange("some_pref_1", true);
-        assertInitialized(that, "alwaysPanel1");
-        assertInitialized(that, "alwaysPanel2");
-        assertInitialized(that, "conditionalPanel1");
-        assertNotInitialized(that, "conditionalPanel2");
 
-        // set some.prefs.1 to false
+        // set some.pref.1 to false
+        jqUnit.expect(10);
+        that.events.afterRender.addListener(function () {
+            assertInitialized(that, "alwaysPanel1");
+            assertChecked(that, "alwaysPanel1", false);
+            assertInitialized(that, "alwaysPanel2");
+            assertChecked(that, "alwaysPanel2", false);
+            assertNotInitialized(that, "conditionalPanel1");
+            assertNotInitialized(that, "conditionalPanel2");
+            that.events.afterRender.removeListener("pref1_false");
+        }, "pref1_false", null, "last");
         that.applier.requestChange("some_pref_1", false);
-        assertInitialized(that, "alwaysPanel1");
-        assertInitialized(that, "alwaysPanel2");
-        assertNotInitialized(that, "conditionalPanel1");
-        assertNotInitialized(that, "conditionalPanel2");
 
-        // set some.prefs.2 to true
+        // set some.pref.2 to true
+        jqUnit.expect(11);
+        that.events.afterRender.addListener(function () {
+            assertInitialized(that, "alwaysPanel1");
+            assertChecked(that, "alwaysPanel1", false);
+            assertInitialized(that, "alwaysPanel2");
+            assertChecked(that, "alwaysPanel2", true);
+            assertNotInitialized(that, "conditionalPanel1");
+            assertInitialized(that, "conditionalPanel2");
+            assertText(that, "conditionalPanel2", "conditionalPanel2");
+            that.events.afterRender.removeListener("pref2_true");
+        }, "pref2_true", null, "last");
         that.applier.requestChange("some_pref_2", true);
-        assertInitialized(that, "alwaysPanel1");
-        assertInitialized(that, "alwaysPanel2");
-        assertNotInitialized(that, "conditionalPanel1");
-        assertInitialized(that, "conditionalPanel2");
 
-        // set some.prefs.2 to false
+        // set some.pref.2 to false
+        jqUnit.expect(10);
+        that.events.afterRender.addListener(function () {
+            assertInitialized(that, "alwaysPanel1");
+            assertChecked(that, "alwaysPanel1", false);
+            assertInitialized(that, "alwaysPanel2");
+            assertChecked(that, "alwaysPanel2", false);
+            assertNotInitialized(that, "conditionalPanel1");
+            assertNotInitialized(that, "conditionalPanel2");
+            that.events.afterRender.removeListener("pref2_false");
+        }, "pref2_false", null, "last");
         that.applier.requestChange("some_pref_2", false);
-        assertInitialized(that, "alwaysPanel1");
-        assertInitialized(that, "alwaysPanel2");
-        assertNotInitialized(that, "conditionalPanel1");
-        assertNotInitialized(that, "conditionalPanel2");
 
     });
 

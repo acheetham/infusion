@@ -176,7 +176,6 @@ var fluid_1_5 = fluid_1_5 || {};
             "onCreate.initSubPanels": "{that}.events.initSubPanels",
             "onCreate.hideInactive": "{that}.hideInactive",
             "onCreate.surfaceSubpanelRendererSelectors": "{that}.surfaceSubpanelRendererSelectors",
-            "onRefreshView.surfaceSubpanelRendererSelectors": "{that}.surfaceSubpanelRendererSelectors",
             "afterRender.initSubPanels": "{that}.events.initSubPanels",
             "afterRender.hideInactive": "{that}.hideInactive",
             "afterRender.subPanelRelay": {
@@ -223,10 +222,6 @@ var fluid_1_5 = fluid_1_5 || {};
             },
             conditionalCreateEvent: {
                 funcName: "fluid.prefs.compositePanel.conditionalCreateEvent",
-            },
-            refreshView: {
-                funcName: "fluid.prefs.compositePanel.refreshView",
-                args: ["{that}"]
             }
         },
         subPanelOverrides: {
@@ -266,11 +261,6 @@ var fluid_1_5 = fluid_1_5 || {};
 
     fluid.prefs.compositePanel.isActivePanel = function (comp) {
         return comp && fluid.hasGrade(comp.options, "fluid.prefs.panel");
-    };
-
-    fluid.prefs.compositePanel.refreshView = function (that) {
-        that.events.onRefreshView.fire(that);
-        fluid.rendererComponent.refreshView(that);
     };
 
     /*
@@ -445,13 +435,15 @@ var fluid_1_5 = fluid_1_5 || {};
     /*
      * Surfaces the rendering selectors from the subpanels to the compositePanel,
      * and scopes them to the subpanel's container.
+     * Since this is used by the cutpoint generator, which only gets run once, we need to
+     * surface all possible subpanel selectors, and not just the active ones.
      */
     fluid.prefs.compositePanel.surfaceSubpanelRendererSelectors = function (that, components, selectors) {
         fluid.each(components, function (compOpts, compName) {
-            var comp = that[compName];
-            if (fluid.prefs.compositePanel.isActivePanel(comp)) {
-                fluid.each(comp.options.selectors, function (selector, selName) {
-                    if (!comp.options.selectorsToIgnore || $.inArray(selName, comp.options.selectorsToIgnore) < 0) {
+            if (fluid.prefs.compositePanel.isPanel(compOpts.type, compOpts.options)) {
+                var opts = fluid.prefs.compositePanel.prefetchComponentOptions(compOpts.type, compOpts.options);
+                fluid.each(opts.selectors, function (selector, selName) {
+                    if (!opts.selectorsToIgnore || $.inArray(selName, opts.selectorsToIgnore) < 0) {
                         fluid.set(selectors,  fluid.prefs.compositePanel.rebaseSelectorName(compName, selName), selectors[compName] + " " + selector);
                     }
                 });
@@ -500,20 +492,24 @@ var fluid_1_5 = fluid_1_5 || {};
         }) || value;
     };
 
-    fluid.prefs.compositePanel.rebaseTree = function (tree, memberName, modelRelayRules) {
+    fluid.prefs.compositePanel.rebaseTree = function (model, tree, memberName, modelRelayRules) {
         var rebased = fluid.transform(tree, function (val, key) {
             if (key === "children") {
                 return fluid.transform(val, function (v) {
-                    return fluid.prefs.compositePanel.rebaseTree(v, memberName, modelRelayRules);
+                    return fluid.prefs.compositePanel.rebaseTree(model, v, memberName, modelRelayRules);
                 });
             } else if (key === "selection") {
-                return fluid.prefs.compositePanel.rebaseTree(val, memberName, modelRelayRules);
+                return fluid.prefs.compositePanel.rebaseTree(model, val, memberName, modelRelayRules);
             } else if (key === "ID") {
                 return fluid.prefs.compositePanel.rebaseID(val, memberName);
             } else if (key === "parentRelativeID") {
                 return fluid.prefs.compositePanel.rebaseParentRelativeID(val, memberName);
             } else if (key === "valuebinding") {
                 return fluid.prefs.compositePanel.rebaseValueBinding(val, modelRelayRules);
+            } else if (key === "value" && tree["valuebinding"]) {
+                var valuebinding = tree["valuebinding"];
+                var modelValue = fluid.get(model, fluid.prefs.compositePanel.rebaseValueBinding(valuebinding, modelRelayRules));
+                return modelValue !== undefined ? modelValue : val;
             } else {
                 return val;
             }
@@ -549,7 +545,7 @@ var fluid_1_5 = fluid_1_5 || {};
                 var expander = fluid.renderer.makeProtoExpander(expanderOptions, subPanel);
                 var subTree = subPanel.produceTree();
                 subTree = fluid.get(subPanel.options, "rendererFnOptions.noexpand") ? subTree : expander(subTree);
-                var rebasedTree = fluid.prefs.compositePanel.rebaseTree(subTree, componentName, subPanel.options.rules);
+                var rebasedTree = fluid.prefs.compositePanel.rebaseTree(that.model, subTree, componentName, subPanel.options.rules);
                 tree.children = tree.children.concat(rebasedTree.children);
             }
         });
