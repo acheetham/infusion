@@ -35,7 +35,7 @@ var learning = learning || {};
         },
         "learning.wordsPerMinute": {
             "type": "number",
-            "default": 60,
+            "default": 180,
             "minimum": 130,
             "maximum": 250,
             "divisibleBy": 10
@@ -74,7 +74,6 @@ var learning = learning || {};
             template: "%prefix/conditionalPrefsEditor.html",
             message: "%prefix/conditionalPrefsEditor.json",
             groups: {
-/*
                 speaking: {
                     "container": ".mpe-speaking",
                     "template": "%prefix/speaking.html",
@@ -94,8 +93,8 @@ var learning = learning || {};
                         "always": ["incSize"],
                         "learning.increaseSize": ["cursor", "magFactor", "magPos"]
                     }
+/*
                 },
-*/
                 speakIncrease: {
                     "container": ".mpe-speakIncrease",
                     "template": "%prefix/speakIncrease.html",
@@ -108,6 +107,7 @@ var learning = learning || {};
                     }
                     // also to try: the 'old' format for panels i.e. just an array of panel names, if there are no conditional panels relevant
 //                    "panels": ["speak", "incSize", "vol", "wpm", "cursor", "magFactor", "magPos"]
+*/
                 }
             },
             speak: {
@@ -193,7 +193,6 @@ var learning = learning || {};
     /**
      * Composite Panels
      */
-/*
     fluid.defaults("learning.panels.speaking", {
         gradeNames: ["fluid.prefs.compositePanel", "autoInit"],
         selectors: {
@@ -212,7 +211,7 @@ var learning = learning || {};
             label: {messagekey: "increasingHeader"}
         }
     });
-*/
+/*
     fluid.defaults("learning.panels.speakIncrease", {
         gradeNames: ["fluid.prefs.compositePanel", "autoInit"],
         selectors: {
@@ -222,6 +221,7 @@ var learning = learning || {};
             label: {messagekey: "speakIncreaseHeader"}
         }
     });
+*/
 
     /**
      * Subpanels
