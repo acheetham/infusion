@@ -65,6 +65,35 @@ var demo = demo || {};
     });
 
     /**
+     * The "language" preference is an enumeration, rendered as a drop-down.
+     */
+    fluid.defaults("demo.panels.language", {
+        gradeNames: ["fluid.prefs.panel", "autoInit"],
+        preferenceMap: {
+            "demo.language": {
+                "model.lang": "default",
+                "controlValues.langStrings": "enum"
+            }
+        },
+        selectors: {
+            language: ".mpe-dropDown",
+            label: ".mpe-dropDown-label"
+        },
+        stringArrayIndex: {
+            langs: ["langs-zho", "langs-spa", "langs-eng", "langs-hin", "langs-ara", "langs-por", "langs-ben", "langs-rus"]
+
+        },
+        protoTree: {
+            label: {messagekey: "langLabel"},
+            language: {
+                optionnames: "${{that}.stringBundle.langs}",
+                optionlist: "${{that}.options.controlValues.langStrings}",
+                selection: "${lang}"
+            }
+        }
+    });
+
+    /**
      * The "volume" preference is a range, rendered as a slider.
      */
     fluid.defaults("demo.panels.vol", {
@@ -237,9 +266,6 @@ var demo = demo || {};
      */
     fluid.defaults("demo.panels.magPos", {
         gradeNames: ["fluid.prefs.panel", "autoInit"],
-rendererOptions: {
-    debugMode: true
-},
         preferenceMap: {
             "demo.magnifierPosition": {
                 "model.magPos": "default",

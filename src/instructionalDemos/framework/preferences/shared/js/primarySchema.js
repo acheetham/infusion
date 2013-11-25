@@ -24,6 +24,11 @@ var demo = demo || {};
      */
 
     demo.primarySchema = {
+        "demo.language": {
+            "type": "string",
+            "default": "eng",
+            "enum": ["zho", "spa", "eng", "hin", "ara", "por", "ben", "rus"]
+        },
         "demo.speakText": {
             "type": "boolean",
             "default": false

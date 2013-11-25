@@ -57,6 +57,21 @@ var demo = demo || {};
         }
     });
 
+    fluid.defaults("demo.enactors.language", {
+        gradeNames: ["fluid.prefs.enactor", "autoInit"],
+        preferenceMap: {
+            "demo.language": {
+                "model.lang": "default"
+            }
+        },
+        modelListeners: {
+            "lang": {
+                funcName: "demo.logModelValue",
+                args: ["lang", "{change}.value"]
+            }
+        }
+    });
+
     fluid.defaults("demo.enactors.vol", {
         gradeNames: ["fluid.prefs.enactor", "autoInit"],
         preferenceMap: {
