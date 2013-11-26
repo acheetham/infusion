@@ -18,8 +18,10 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
 var demo = demo || {};
 (function () {
 
-    demo.logModelValue = function (name, changeVal) {
-        console.log(name + " model changed to: " + changeVal);
-    };
+    // Ensure that only the "IMPORTANT" log messages created by the enactor logging function are displayed
+    fluid.setLogging(false);
 
+    demo.logModelValue = function (name, changeVal) {
+        fluid.log(fluid.logLevel.IMPORTANT, name + " model changed to: " + changeVal);
+    };
 })();

@@ -31,7 +31,7 @@ var demo = demo || {};
                     "messagePrefix": "../shared/messages/"
                 }
             }
-        })
+        });
     };
 
 })(jQuery, fluid);
