@@ -62,7 +62,16 @@ var fluid_1_5 = fluid_1_5 || {};
      ***********************************************/
 
     fluid.defaults("fluid.prefs.panel", {
-        gradeNames: ["fluid.rendererComponent", "fluid.prefs.stringBundle", "fluid.prefs.modelRelay", "autoInit"]
+        gradeNames: ["fluid.rendererComponent", "fluid.prefs.stringBundle", "fluid.prefs.modelRelay", "autoInit"],
+        events: {
+            onDomBind: null
+        },
+        // Any listener that requires a DOM element, should be registered
+        // to the onDomBind listener. By default it is fired by onCreate, but
+        // when used as a subpanel, it will be triggered by the resetDomBinder invoker.
+        listeners: {
+            "onCreate.onDomBind": "{that}.events.onDomBind"
+        }
     });
 
     /***************************
@@ -70,16 +79,21 @@ var fluid_1_5 = fluid_1_5 || {};
      ***************************/
 
     fluid.defaults("fluid.prefs.subPanel", {
-        gradeNames: ["fluid.prefs.panel", "autoInit"],
+        gradeNames: ["fluid.prefs.panel", "{that}.getDomBindGrade", "autoInit"],
         mergePolicy: {
             sourceApplier: "nomerge"
         },
         sourceApplier: "{compositePanel}.applier",
         listeners: {
-            "{compositePanel}.events.subPanelAfterRender": {
+            "{compositePanel}.events.afterRender": {
                 listener: "{that}.events.afterRender",
                 args: ["{that}"]
-            }
+            },
+            // Changing the firing of onDomBind from the onCreate.
+            // This is due to the fact that the rendering process, controlled by the
+            // composite panel, will set/replace the DOM elements.
+            "onCreate.onDomBind": null, // remove listener
+            "afterRender.onDomBind": "{that}.resetDomBinder"
         },
         rules: {
             expander: {
@@ -94,12 +108,50 @@ var fluid_1_5 = fluid_1_5 || {};
             }
         },
         invokers: {
-            refreshView: "{compositePanel}.refreshView"
+            refreshView: "{compositePanel}.refreshView",
+            // resetDomBinder must fire the onDomBind event
+            resetDomBinder: {
+                funcName: "fluid.prefs.subPanel.resetDomBinder",
+                args: ["{that}"]
+            },
+            getDomBindGrade: {
+                funcName: "fluid.prefs.subPanel.getDomBindGrade",
+                args: ["{prefsEditor}"]
+            }
         },
         strings: {},
         parentBundle: "{compositePanel}.messageResolver",
         renderOnInit: false
     });
+
+    fluid.defaults("fluid.prefs.subPanel.domBind", {
+        gradeNames: ["fluid.eventedComponent", "autoInit"],
+        listeners: {
+            "onDomBind.domChange": {
+                listener: "{prefsEditor}.events.onSignificantDOMChange"
+            }
+        }
+    });
+
+    fluid.prefs.subPanel.getDomBindGrade = function (prefsEditor) {
+        var hasListener = fluid.get(prefsEditor, "options.events.onSignificantDOMChange") !== undefined;
+        if (hasListener) {
+            return "fluid.prefs.subPanel.domBind";
+        }
+    };
+
+    /*
+     * Since the composite panel manages the rendering of the subpanels
+     * the markup used by subpanels needs to be completely replaced.
+     * The subpanel's container is refereshed to point at the newly
+     * rendered markup, and the domBinder is re-initialized. Once
+     * this is all done, the onDomBind event is fired.
+     */
+    fluid.prefs.subPanel.resetDomBinder = function (that) {
+        that.container = $(that.container.selector);
+        fluid.initDomBinder(that, that.options.selectors);
+        that.events.onDomBind.fire(that);
+    };
 
     fluid.prefs.subPanel.safePrefKey = function (prefKey) {
         return prefKey.replace(/[.]/g, "_");
@@ -163,8 +215,7 @@ var fluid_1_5 = fluid_1_5 || {};
         repeatingSelectors: [],
         events: {
             onRefreshView: null,
-            initSubPanels: null,
-            subPanelAfterRender: null
+            initSubPanels: null
         },
         listeners: {
             "onCreate.combineResources": "{that}.combineResources",
@@ -176,12 +227,7 @@ var fluid_1_5 = fluid_1_5 || {};
             "onCreate.initSubPanels": "{that}.events.initSubPanels",
             "onCreate.hideInactive": "{that}.hideInactive",
             "onCreate.surfaceSubpanelRendererSelectors": "{that}.surfaceSubpanelRendererSelectors",
-            "afterRender.initSubPanels": "{that}.events.initSubPanels",
-            "afterRender.hideInactive": "{that}.hideInactive",
-            "afterRender.subPanelRelay": {
-                listener: "{that}.events.subPanelAfterRender",
-                priority: "last"
-            }
+            "afterRender.hideInactive": "{that}.hideInactive"
         },
         invokers: {
             getDistributeOptionsGrade: {
@@ -347,16 +393,14 @@ var fluid_1_5 = fluid_1_5 || {};
                     var afterRenderListener = "afterRender." + pref;
                     var onCreateListener = "onCreate." + pref;
                     creationEventOpt = fluid.prefs.compositePanel.creationEventName(pref);
-                    var listenerOpts = {
-                        listener: "{that}.conditionalCreateEvent",
-                        args: ["{that}.model." + pref, "{that}.events." + creationEventOpt + ".fire"]
-                    };
                     subPanelCreationOpts[creationEventOpt] = creationEventOpt;
                     events[creationEventOpt] = null;
                     conditionals[pref] = conditionals[pref] || [];
                     conditionals[pref].push(componentName);
-                    listeners[afterRenderListener] = listenerOpts;
-                    listeners[onCreateListener] = listenerOpts;
+                    listeners[onCreateListener] = {
+                        listener: "{that}.conditionalCreateEvent",
+                        args: ["{that}.model." + pref, "{that}.events." + creationEventOpt + ".fire"]
+                    };
                 }
                 distributeOptions.push({
                     source: "{that}.options.subPanelCreationOpts." + creationEventOpt,
