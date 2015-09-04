@@ -87,12 +87,16 @@ var minEditor = minEditor || {};
             }
         },
 
+/*
+technically, the panel will function without this definition;
+the framework will create the property based on the preferenceMap.
+Our starter panels include it, though. Do we really need it? What's the 'best practice'?
         range: {
             min: 1, // see comment in primary schema about strings vs numbers
             max: 10,
             step: 1
         },
-
+*/
         selectors: {
             radioVolume: ".mec-radioVolume"
         },
