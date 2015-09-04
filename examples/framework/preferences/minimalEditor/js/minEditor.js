@@ -32,6 +32,13 @@ var minEditor = minEditor || {};
             "minEditor.autoPilot": {
                 "type": "boolean",
                 "default": false
+            },
+            "minEditor.radioVolume": {
+                "type": "number",
+                "default": "2", // these are strings because the renderer doesn't like numbers – why?
+                "minimum": "1",
+                "maximum": "5",
+                "divisibleBy": "0.5"
             }
         }
     });
@@ -62,6 +69,46 @@ var minEditor = minEditor || {};
         protoTree: {
             // this value is an IoC reference to the last part of the model path in the preferenceMap
             autoPilot: "${autoPilot}"
+        }
+    });
+
+    /**
+     * Panel for the radio volume preference
+     */
+    fluid.defaults("minEditor.panels.radioVolume", {
+        gradeNames: ["fluid.prefs.panel"],
+
+        preferenceMap: {
+            "minEditor.radioVolume": {
+                "model.radioVolume": "default",
+                "range.min": "minimum",
+                "range.max": "maximum",
+                "range.step": "divisibleBy"
+            }
+        },
+
+        range: {
+            min: 1, // see comment in primary schema about strings vs numbers
+            max: 10,
+            step: 1
+        },
+
+        selectors: {
+            radioVolume: ".mec-radioVolume"
+        },
+
+        protoTree: {
+            radioVolume: {
+                value: "${radioVolume}",
+                decorators: [{
+                    type: "attrs",
+                    attributes: {
+                        min: "${{that}.options.range.min}",
+                        max: "${{that}.options.range.max}",
+                        step: "${{that}.options.range.step}"
+                    }
+                }]
+            }
         }
     });
 
@@ -98,6 +145,15 @@ var minEditor = minEditor || {};
 
                     // the template for this panel
                     template: "%templatePrefix/autoPilot.html"
+                }
+            },
+
+            radioVolume: {
+                type: "minEditor.radioVolume",
+                panel: {
+                    type: "minEditor.panels.radioVolume",
+                    container: ".mec-radioVolume",
+                    template: "%templatePrefix/radioVolume.html"
                 }
             }
         }
