@@ -39,6 +39,14 @@ var minEditor = minEditor || {};
                 "minimum": "1",
                 "maximum": "5",
                 "divisibleBy": "0.5"
+            },
+            "minEditor.x": {
+                "type": "boolean",
+                "default": false
+            },
+            "minEditor.y": {
+                "type": "boolean",
+                "default": true
             }
         }
     });
@@ -107,13 +115,46 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
                 decorators: [{
                     type: "attrs",
                     attributes: {
-                        min: "${{that}.options.range.min}",
-                        max: "${{that}.options.range.max}",
-                        step: "${{that}.options.range.step}"
+                        min: "{that}.options.range.min",
+                        max: "{that}.options.range.max",
+                        step: "{that}.options.range.step"
                     }
                 }]
             }
         }
+    });
+
+
+    fluid.defaults("minEditor.panels.x", {
+        gradeNames: ["fluid.prefs.panel"],
+        preferenceMap: {
+            "minEditor.x": {
+                "model.x": "default"
+            }
+        },
+        selectors: {
+            autoPilot: ".mec-x"
+        },
+        protoTree: {
+            autoPilot: "${x}"
+        }
+    });
+    fluid.defaults("minEditor.panels.y", {
+        gradeNames: ["fluid.prefs.panel"],
+        preferenceMap: {
+            "minEditor.y": {
+                "model.y": "default"
+            }
+        },
+        selectors: {
+            autoPilot: ".mec-y"
+        },
+        protoTree: {
+            autoPilot: "${y}"
+        }
+    });
+    fluid.defaults("minEditor.panels.xy", {
+        gradeNames: ["fluid.prefs.compositePanel"]
     });
 
     /**
@@ -158,6 +199,31 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
                     type: "minEditor.panels.radioVolume",
                     container: ".mec-radioVolume",
                     template: "%templatePrefix/radioVolume.html"
+                }
+            },
+
+            x: {
+                type: "minEditor.x",
+                panel: {
+                    type: "minEditor.panels.x",
+                    container: ".mec-x",
+                    template: "%templatePrefix/x.html"
+                }
+            },
+            y: {
+                type: "minEditor.y",
+                panel: {
+                    type: "minEditor.panels.y",
+                    container: ".mec-y",
+                    template: "%templatePrefix/y.html"
+                }
+            },
+            groups: {
+                xy: {
+                    type: "minEditor.panels.xy",
+                    container: ".mec-xy",
+                    template: "%templatePrefix/xy.html",
+                    panels: ["x", "y"]
                 }
             }
         }
