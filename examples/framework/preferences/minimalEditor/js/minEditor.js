@@ -206,7 +206,7 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
                 type: "minEditor.x",
                 panel: {
                     type: "minEditor.panels.x",
-                    container: ".mec-x",
+                    container: ".mec-xx",
                     template: "%templatePrefix/x.html"
                 }
             },
@@ -214,7 +214,7 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
                 type: "minEditor.y",
                 panel: {
                     type: "minEditor.panels.y",
-                    container: ".mec-y",
+                    container: ".mec-yy",
                     template: "%templatePrefix/y.html"
                 }
             },
