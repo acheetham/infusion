@@ -47,6 +47,17 @@ var minEditor = minEditor || {};
             "minEditor.y": {
                 "type": "boolean",
                 "default": true
+            },
+            "minEditor.m": {
+                "type": "boolean",
+                "default": false
+            },
+            "minEditor.n": {
+                "type": "number",
+                "default": "0.5",
+                "minimum": "0",
+                "maximum": "1",
+                "divisibleBy": "0.1"
             }
         }
     });
@@ -157,6 +168,58 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
         gradeNames: ["fluid.prefs.compositePanel"]
     });
 
+    fluid.defaults("minEditor.panels.m", {
+        gradeNames: ["fluid.prefs.panel"],
+        preferenceMap: {
+            "minEditor.m": {
+                "model.m": "default"
+            }
+        },
+        selectors: {
+            autoPilot: ".mec-m"
+        },
+        protoTree: {
+            autoPilot: "${m}"
+        }
+    });
+    fluid.defaults("minEditor.panels.n", {
+        gradeNames: ["fluid.prefs.panel"],
+
+        preferenceMap: {
+            "minEditor.n": {
+                "model.n": "default",
+                "range.min": "minimum",
+                "range.max": "maximum",
+                "range.step": "divisibleBy"
+            }
+        },
+        range: {
+            min: 1, // see comment in primary schema about strings vs numbers
+            max: 10,
+            step: 1
+        },
+        selectors: {
+            radioVolume: ".mec-n"
+        },
+
+        protoTree: {
+            radioVolume: {
+                value: "${n}",
+                decorators: [{
+                    type: "attrs",
+                    attributes: {
+                        min: "{that}.options.range.min",
+                        max: "{that}.options.range.max",
+                        step: "{that}.options.range.step"
+                    }
+                }]
+            }
+        }
+    });
+    fluid.defaults("minEditor.panels.mn", {
+        gradeNames: ["fluid.prefs.compositePanel"]
+    });
+
     /**
      * Auxiliary Schema
      */
@@ -202,7 +265,7 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
                 }
             },
 
-            x: {
+            xx: {
                 type: "minEditor.x",
                 panel: {
                     type: "minEditor.panels.x",
@@ -210,7 +273,7 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
                     template: "%templatePrefix/x.html"
                 }
             },
-            y: {
+            yy: {
                 type: "minEditor.y",
                 panel: {
                     type: "minEditor.panels.y",
@@ -218,12 +281,37 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
                     template: "%templatePrefix/y.html"
                 }
             },
+            mm: {
+                type: "minEditor.m",
+                panel: {
+                    type: "minEditor.panels.m",
+                    container: ".mec-mm",
+                    template: "%templatePrefix/m.html"
+                }
+            },
+            nn: {
+                type: "minEditor.n",
+                panel: {
+                    type: "minEditor.panels.n",
+                    container: ".mec-nn",
+                    template: "%templatePrefix/n.html"
+                }
+            },
             groups: {
                 xy: {
                     type: "minEditor.panels.xy",
                     container: ".mec-xy",
                     template: "%templatePrefix/xy.html",
-                    panels: ["x", "y"]
+                    panels: ["xx", "yy"]
+                },
+                mn: {
+                    type: "minEditor.panels.mn",
+                    container: ".mec-mn",
+                    template: "%templatePrefix/mn.html",
+                    panels: {
+                        always: ["mm"],
+                        "minEditor.m": ["nn"]
+                    }
                 }
             }
         }
