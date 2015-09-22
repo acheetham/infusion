@@ -80,14 +80,18 @@ var minEditor = minEditor || {};
         // selectors identify elements in the DOM that need to be accessed by the code;
         // in this case, the Renderer will render data into these particular elements
         selectors: {
-            autoPilot: ".mec-autoPilot"
+            autoPilot: ".mec-autoPilot",
+            headerEl: ".mec-autoPilot-header",
+            labelEl: ".mec-autoPilot-label"
         },
 
         // the ProtoTree is basically instructions to the Renderer
         // the keys in the prototree match the selectors above
         protoTree: {
             // this value is an IoC reference to the last part of the model path in the preferenceMap
-            autoPilot: "${autoPilot}"
+            autoPilot: "${autoPilot}",
+            headerEl: {messagekey: "header"},
+            labelEl: {messagekey: "label"}
         }
     });
 
@@ -117,7 +121,9 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
         },
 */
         selectors: {
-            radioVolume: ".mec-radioVolume"
+            radioVolume: ".mec-radioVolume",
+            header: ".mec-radioVolume-header",
+            label: ".mec-radioVolume-label"
         },
 
         protoTree: {
@@ -131,7 +137,9 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
                         step: "{that}.options.range.step"
                     }
                 }]
-            }
+            },
+            header: {messagekey: "header"},
+            label: {messagekey: "label"}
         }
     });
 
@@ -235,7 +243,8 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
 
             // 'terms' are strings that can be re-used elsewhere in this schema;
             terms: {
-                templatePrefix: "html"
+                templatePrefix: "html",
+                messagePrefix: "messages"
             },
 
             // the main template for the preference editor itself
@@ -252,7 +261,9 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
                     container: ".mec-autoPilot",
 
                     // the template for this panel
-                    template: "%templatePrefix/autoPilot.html"
+                    template: "%templatePrefix/autoPilot.html",
+
+                    message: "%messagePrefix/autoPilot.json"
                 }
             },
 
@@ -261,7 +272,8 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
                 panel: {
                     type: "minEditor.panels.radioVolume",
                     container: ".mec-radioVolume",
-                    template: "%templatePrefix/radioVolume.html"
+                    template: "%templatePrefix/radioVolume.html",
+                    message: "%messagePrefix/radioVolume.json"
                 }
             },
 
