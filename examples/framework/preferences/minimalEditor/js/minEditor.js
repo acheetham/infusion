@@ -247,6 +247,11 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
                 messagePrefix: "messages"
             },
 
+            messageLoader: {
+                locale: "sp",
+                defaultLocale: "fr"
+            },
+
             // the main template for the preference editor itself
             template: "%templatePrefix/minEditor.html",
 
