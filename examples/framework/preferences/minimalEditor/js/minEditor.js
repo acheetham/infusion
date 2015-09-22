@@ -228,6 +228,14 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
         gradeNames: ["fluid.prefs.compositePanel"]
     });
 
+    fluid.defaults("minEditor.editor", {
+        gradeNames: ["fluid.rendererComponent"],
+        messageLoader: {
+            locale: "sp",
+            defaultLocale: "fr"
+        }
+    });
+
     /**
      * Auxiliary Schema
      */
@@ -239,17 +247,12 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
         auxiliarySchema: {
 
             // the loaderGrade identifies the "base" form of preference editor desired
-            loaderGrades: ["fluid.prefs.fullNoPreview"],
+            loaderGrades: ["minEditor.editor", "fluid.prefs.fullNoPreview"],
 
             // 'terms' are strings that can be re-used elsewhere in this schema;
             terms: {
                 templatePrefix: "html",
                 messagePrefix: "messages"
-            },
-
-            messageLoader: {
-                locale: "sp",
-                defaultLocale: "fr"
             },
 
             // the main template for the preference editor itself
