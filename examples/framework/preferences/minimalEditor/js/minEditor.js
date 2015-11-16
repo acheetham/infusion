@@ -40,7 +40,7 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         // the ProtoTree is basically instructions to the Renderer
         // the keys in the prototree match the selectors above
         protoTree: {
-            // this value is an IoC reference to the last part of the model path in the preferenceMap
+            // this value is a reference to the last part of the model path in the preferenceMap
             autoPilot: "${autoPilot}",
             headerEl: {messagekey: "header"},
             labelEl: {messagekey: "label"}
@@ -190,6 +190,7 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
 
     /**
      * Initialize and instantiate the editor
+     * TODO: Update this when https://issues.fluidproject.org/browse/FLUID-5817 is addressed
      */
     minEditor.init = function (container) {
         return fluid.prefs.create(container, {
