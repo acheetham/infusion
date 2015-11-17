@@ -38,13 +38,19 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
                 "maximum": "5",
                 "divisibleBy": "0.5"
             },
-            "minEditor.x": {
-                "type": "boolean",
-                "default": false
+            "minEditor.temp": {
+                "type": "number",
+                "default": "22",
+                "minimum": "15",
+                "maximum": "28",
+                "divisibleBy": "0.5"
             },
-            "minEditor.y": {
-                "type": "boolean",
-                "default": true
+            "minEditor.humid": {
+                "type": "number",
+                "default": "55",
+                "minimum": "35",
+                "maximum": "70",
+                "divisibleBy": "5"
             },
             "minEditor.m": {
                 "type": "boolean",

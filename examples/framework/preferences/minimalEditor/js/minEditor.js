@@ -96,35 +96,55 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
     });
 
 
-    fluid.defaults("minEditor.panels.x", {
+    fluid.defaults("minEditor.panels.temp", {
         gradeNames: ["fluid.prefs.panel"],
         preferenceMap: {
-            "minEditor.x": {
-                "model.x": "default"
+            "minEditor.temp": {
+                "model.temp": "default"
             }
         },
         selectors: {
-            autoPilot: ".mec-x"
+            temp: ".mec-temp"
         },
         protoTree: {
-            autoPilot: "${x}"
+            temp: {
+                value: "${temp}",
+                decorators: [{
+                    type: "attrs",
+                    attributes: {
+                        min: "{that}.options.range.min",
+                        max: "{that}.options.range.max",
+                        step: "{that}.options.range.step"
+                    }
+                }]
+            }
         }
     });
-    fluid.defaults("minEditor.panels.y", {
+    fluid.defaults("minEditor.panels.humid", {
         gradeNames: ["fluid.prefs.panel"],
         preferenceMap: {
-            "minEditor.y": {
-                "model.y": "default"
+            "minEditor.humid": {
+                "model.humid": "default"
             }
         },
         selectors: {
-            autoPilot: ".mec-y"
+            humid: ".mec-humid"
         },
         protoTree: {
-            autoPilot: "${y}"
+            humid: {
+                value: "${humid}",
+                decorators: [{
+                    type: "attrs",
+                    attributes: {
+                        min: "{that}.options.range.min",
+                        max: "{that}.options.range.max",
+                        step: "{that}.options.range.step"
+                    }
+                }]
+            }
         }
     });
-    fluid.defaults("minEditor.panels.xy", {
+    fluid.defaults("minEditor.panels.climate", {
         gradeNames: ["fluid.prefs.compositePanel"]
     });
 

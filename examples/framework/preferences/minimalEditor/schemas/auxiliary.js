@@ -63,20 +63,20 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
                 }
             },
 
-            xx: {
-                type: "minEditor.x",
+            temperature: {
+                type: "minEditor.temp",
                 panel: {
-                    type: "minEditor.panels.x",
-                    container: ".mec-xx",
-                    template: "%templatePrefix/x.html"
+                    type: "minEditor.panels.temp",
+                    container: ".mec-temperature",
+                    template: "%templatePrefix/temp.html"
                 }
             },
-            yy: {
-                type: "minEditor.y",
+            humidity: {
+                type: "minEditor.humid",
                 panel: {
-                    type: "minEditor.panels.y",
-                    container: ".mec-yy",
-                    template: "%templatePrefix/y.html"
+                    type: "minEditor.panels.humid",
+                    container: ".mec-humidity",
+                    template: "%templatePrefix/humid.html"
                 }
             },
             mm: {
@@ -96,11 +96,11 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
                 }
             },
             groups: {
-                xy: {
-                    type: "minEditor.panels.xy",
-                    container: ".mec-xy",
-                    template: "%templatePrefix/xy.html",
-                    panels: ["xx", "yy"]
+                climate: {
+                    type: "minEditor.panels.climate",
+                    container: ".mec-climate",
+                    template: "%templatePrefix/climate.html",
+                    panels: ["temperature", "humidity"]
                 },
                 mn: {
                     type: "minEditor.panels.mn",
