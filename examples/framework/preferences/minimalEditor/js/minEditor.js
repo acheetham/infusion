@@ -15,33 +15,33 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
     "use strict";
 
     /**
-     * Panel for the auto-pilot preference
+     * Panel for the heated seats preference
      */
-    fluid.defaults("minEditor.panels.autoPilot", {
+    fluid.defaults("minEditor.panels.heatedSeats", {
         gradeNames: ["fluid.prefs.panel"],
 
         // the Preference Map maps the information in the primary schema to this panel
         preferenceMap: {
             // the key must match the name of the pref in the primary schema
-            "minEditor.autoPilot": {
+            "minEditor.heatedSeats": {
                 // this key is the path into the panel's model where this preference is stored
-                "model.autoPilot": "default"
+                "model.heatedSeats": "default"
             }
         },
 
         // selectors identify elements in the DOM that need to be accessed by the code;
         // in this case, the Renderer will render data into these particular elements
         selectors: {
-            autoPilot: ".mec-autoPilot",
-            headerEl: ".mec-autoPilot-header",
-            labelEl: ".mec-autoPilot-label"
+            heatedSeats: ".mec-heatedSeats",
+            headerEl: ".mec-heatedSeats-header",
+            labelEl: ".mec-heatedSeats-label"
         },
 
         // the ProtoTree is basically instructions to the Renderer
         // the keys in the prototree match the selectors above
         protoTree: {
             // this value is a reference to the last part of the model path in the preferenceMap
-            autoPilot: "${autoPilot}",
+            heatedSeats: "${heatedSeats}",
             headerEl: {messagekey: "header"},
             labelEl: {messagekey: "label"}
         }
@@ -156,10 +156,10 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
             }
         },
         selectors: {
-            autoPilot: ".mec-m"
+            m: ".mec-m"
         },
         protoTree: {
-            autoPilot: "${m}"
+            m: "${m}"
         }
     });
     fluid.defaults("minEditor.panels.n", {
@@ -179,11 +179,11 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
             step: 1
         },
         selectors: {
-            radioVolume: ".mec-n"
+            n: ".mec-n"
         },
 
         protoTree: {
-            radioVolume: {
+            n: {
                 value: "${n}",
                 decorators: [{
                     type: "attrs",
