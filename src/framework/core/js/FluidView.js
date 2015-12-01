@@ -13,7 +13,7 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
 /** This file contains functions which depend on the presence of a DOM document
  *  and which depend on the contents of Fluid.js **/
 
-var fluid_2_0 = fluid_2_0 || {};
+var fluid_2_0_0 = fluid_2_0_0 || {};
 
 (function ($, fluid) {
     "use strict";
@@ -338,9 +338,9 @@ var fluid_2_0 = fluid_2_0 || {};
             if (typeof(newValue) === "boolean") {
                 newValue = (newValue ? "true" : "false");
             }
-          // jQuery gets this partially right, but when dealing with radio button array will
-          // set all of their values to "newValue" rather than setting the checked property
-          // of the corresponding control.
+            // jQuery gets this partially right, but when dealing with radio button array will
+            // set all of their values to "newValue" rather than setting the checked property
+            // of the corresponding control.
             $.each(elements, function () {
                 this.checked = (newValue instanceof Array ?
                     newValue.indexOf(this.value) !== -1 : newValue === this.value);
@@ -466,7 +466,7 @@ var fluid_2_0 = fluid_2_0 || {};
         if (!element || fluid.isPrimitive(element)) {
             return null;
         }
-        
+
         if (!element.id) {
             var simpleId = "fluid-id-" + fluid.allocateGuid();
             element.id = simpleId;
@@ -496,7 +496,7 @@ var fluid_2_0 = fluid_2_0 || {};
             }
         }
     });
-    
+
     fluid.ariaLabeller.update = function (that, newOptions) {
         newOptions = newOptions || that.options;
         that.container.attr(that.options.labelAttribute, newOptions.text);
@@ -665,4 +665,4 @@ var fluid_2_0 = fluid_2_0 || {};
         backDelay: 100
     });
 
-})(jQuery, fluid_2_0);
+})(jQuery, fluid_2_0_0);
