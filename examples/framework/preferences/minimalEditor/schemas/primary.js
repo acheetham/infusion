@@ -19,7 +19,7 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
      * This schema defines the preference(s) edited by this preferences editor:
      * their names, types, default values, etc.
      */
-    fluid.defaults("minEditor.primarySchema", {
+    fluid.defaults("awesomeCars.prefs.schemas.heatedSeats", {
 
         // the base grade for the schema;
         // using this grade tells the framework that this is a primary schema
@@ -27,36 +27,36 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
 
         schema: {
             // the actual specification of the preference
-            "minEditor.heatedSeats": {
+            "awesomeCars.prefs.heatedSeats": {
                 "type": "boolean",
                 "default": false
             },
-            "minEditor.radioVolume": {
+            "awesomeCars.prefs.radioVolume": {
                 "type": "number",
                 "default": "2", // these are strings because the renderer doesn't like numbers – why?
                 "minimum": "1",
                 "maximum": "5",
                 "divisibleBy": "0.5"
             },
-            "minEditor.temp": {
+            "awesomeCars.prefs.temp": {
                 "type": "number",
                 "default": "22",
                 "minimum": "15",
                 "maximum": "28",
                 "divisibleBy": "0.5"
             },
-            "minEditor.humid": {
+            "awesomeCars.prefs.humid": {
                 "type": "number",
                 "default": "55",
                 "minimum": "35",
                 "maximum": "70",
                 "divisibleBy": "5"
             },
-            "minEditor.m": {
+            "awesomeCars.prefs.m": {
                 "type": "boolean",
                 "default": false
             },
-            "minEditor.n": {
+            "awesomeCars.prefs.n": {
                 "type": "number",
                 "default": "0.5",
                 "minimum": "0",

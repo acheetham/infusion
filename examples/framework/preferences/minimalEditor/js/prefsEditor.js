@@ -17,13 +17,13 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
     /**
      * Panel for the heated seats preference
      */
-    fluid.defaults("minEditor.panels.heatedSeats", {
+    fluid.defaults("awesomeCars.prefs.panels.heatedSeats", {
         gradeNames: ["fluid.prefs.panel"],
 
         // the Preference Map maps the information in the primary schema to this panel
         preferenceMap: {
             // the key must match the name of the pref in the primary schema
-            "minEditor.heatedSeats": {
+            "awesomeCars.prefs.heatedSeats": {
                 // this key is the path into the panel's model where this preference is stored
                 "model.heatedSeats": "default"
             }
@@ -32,9 +32,9 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         // selectors identify elements in the DOM that need to be accessed by the code;
         // in this case, the Renderer will render data into these particular elements
         selectors: {
-            heatedSeats: ".mec-heatedSeats",
-            headerEl: ".mec-heatedSeats-header",
-            labelEl: ".mec-heatedSeats-label"
+            heatedSeats: ".awec-heatedSeats",
+            headerEl: ".awec-heatedSeats-header",
+            labelEl: ".awec-heatedSeats-label"
         },
 
         // the ProtoTree is basically instructions to the Renderer
@@ -50,11 +50,11 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
     /**
      * Panel for the radio volume preference
      */
-    fluid.defaults("minEditor.panels.radioVolume", {
+    fluid.defaults("awesomeCars.prefs.panels.radioVolume", {
         gradeNames: ["fluid.prefs.panel"],
 
         preferenceMap: {
-            "minEditor.radioVolume": {
+            "awesomeCars.prefs.radioVolume": {
                 "model.radioVolume": "default",
                 "range.min": "minimum",
                 "range.max": "maximum",
@@ -73,9 +73,9 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
         },
 */
         selectors: {
-            radioVolume: ".mec-radioVolume",
-            header: ".mec-radioVolume-header",
-            label: ".mec-radioVolume-label"
+            radioVolume: ".awec-radioVolume",
+            header: ".awec-radioVoluawe-header",
+            label: ".awec-radioVoluawe-label"
         },
 
         protoTree: {
@@ -96,15 +96,15 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
     });
 
 
-    fluid.defaults("minEditor.panels.temp", {
+    fluid.defaults("awesomeCars.prefs.panels.temp", {
         gradeNames: ["fluid.prefs.panel"],
         preferenceMap: {
-            "minEditor.temp": {
+            "awesomeCars.prefs.temp": {
                 "model.temp": "default"
             }
         },
         selectors: {
-            temp: ".mec-temp"
+            temp: ".awec-temp"
         },
         protoTree: {
             temp: {
@@ -120,15 +120,15 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
             }
         }
     });
-    fluid.defaults("minEditor.panels.humid", {
+    fluid.defaults("awesomeCars.prefs.panels.humid", {
         gradeNames: ["fluid.prefs.panel"],
         preferenceMap: {
-            "minEditor.humid": {
+            "awesomeCars.prefs.humid": {
                 "model.humid": "default"
             }
         },
         selectors: {
-            humid: ".mec-humid"
+            humid: ".awec-humid"
         },
         protoTree: {
             humid: {
@@ -144,29 +144,29 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
             }
         }
     });
-    fluid.defaults("minEditor.panels.climate", {
+    fluid.defaults("awesomeCars.prefs.panels.climate", {
         gradeNames: ["fluid.prefs.compositePanel"]
     });
 
-    fluid.defaults("minEditor.panels.m", {
+    fluid.defaults("awesomeCars.prefs.panels.m", {
         gradeNames: ["fluid.prefs.panel"],
         preferenceMap: {
-            "minEditor.m": {
+            "awesomeCars.prefs.m": {
                 "model.m": "default"
             }
         },
         selectors: {
-            m: ".mec-m"
+            m: ".awec-m"
         },
         protoTree: {
             m: "${m}"
         }
     });
-    fluid.defaults("minEditor.panels.n", {
+    fluid.defaults("awesomeCars.prefs.panels.n", {
         gradeNames: ["fluid.prefs.panel"],
 
         preferenceMap: {
-            "minEditor.n": {
+            "awesomeCars.prefs.n": {
                 "model.n": "default",
                 "range.min": "minimum",
                 "range.max": "maximum",
@@ -179,7 +179,7 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
             step: 1
         },
         selectors: {
-            n: ".mec-n"
+            n: ".awec-n"
         },
 
         protoTree: {
@@ -196,11 +196,11 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
             }
         }
     });
-    fluid.defaults("minEditor.panels.mn", {
+    fluid.defaults("awesomeCars.prefs.panels.mn", {
         gradeNames: ["fluid.prefs.compositePanel"]
     });
 
-    fluid.defaults("minEditor.editor", {
+    fluid.defaults("awesomeCars.prefs.editor", {
         gradeNames: ["fluid.rendererComponent"],
         messageLoader: {
             locale: "sp",
@@ -212,10 +212,10 @@ Our starter panels include it, though. Do we really need it? What's the 'best pr
      * Initialize and instantiate the editor
      * TODO: Update this when https://issues.fluidproject.org/browse/FLUID-5817 is addressed
      */
-    minEditor.init = function (container) {
+    awesomeCars.prefs.init = function (container) {
         return fluid.prefs.create(container, {
             build: {
-                gradeNames: ["minEditor.auxSchema"]
+                gradeNames: ["awesomeCars.prefs.auxSchema"]
             }
         });
     };
