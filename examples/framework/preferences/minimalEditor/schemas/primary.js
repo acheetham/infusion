@@ -30,33 +30,63 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
             "awesomeCars.prefs.heatedSeats": {
                 "type": "boolean",
                 "default": false
-            },
-            "awesomeCars.prefs.radioVolume": {
+            }
+        }
+    });
+
+     fluid.defaults("awesomeCars.prefs.schemas.radioVolume", {
+        gradeNames: ["fluid.prefs.schemas"],
+        schema: {
+           "awesomeCars.prefs.radioVolume": {
                 "type": "number",
                 "default": "2", // these are strings because the renderer doesn't like numbers – why?
                 "minimum": "1",
                 "maximum": "5",
                 "divisibleBy": "0.5"
-            },
-            "awesomeCars.prefs.temp": {
+            }
+        }
+    });
+
+     fluid.defaults("awesomeCars.prefs.schemas.temp", {
+        gradeNames: ["fluid.prefs.schemas"],
+        schema: {
+           "awesomeCars.prefs.temp": {
                 "type": "number",
                 "default": "22",
                 "minimum": "15",
                 "maximum": "28",
                 "divisibleBy": "0.5"
-            },
-            "awesomeCars.prefs.humid": {
+            }
+        }
+    });
+
+     fluid.defaults("awesomeCars.prefs.schemas.humid", {
+        gradeNames: ["fluid.prefs.schemas"],
+        schema: {
+           "awesomeCars.prefs.humid": {
                 "type": "number",
                 "default": "55",
                 "minimum": "35",
                 "maximum": "70",
                 "divisibleBy": "5"
-            },
-            "awesomeCars.prefs.m": {
+            }
+        }
+    });
+
+     fluid.defaults("awesomeCars.prefs.schemas.m", {
+        gradeNames: ["fluid.prefs.schemas"],
+        schema: {
+           "awesomeCars.prefs.m": {
                 "type": "boolean",
                 "default": false
-            },
-            "awesomeCars.prefs.n": {
+            }
+        }
+    });
+
+     fluid.defaults("awesomeCars.prefs.schemas.n", {
+        gradeNames: ["fluid.prefs.schemas"],
+        schema: {
+           "awesomeCars.prefs.n": {
                 "type": "number",
                 "default": "0.5",
                 "minimum": "0",
