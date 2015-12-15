@@ -43,19 +43,6 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         }
     });
 
-    fluid.contextAware.makeChecks({"awesomeCars.prefs.car": true});
-
-    fluid.contextAware.makeAdaptation({
-        distributionName: "awesomeCars.prefs.car.storeDistributor",
-        targetName: "fluid.prefs.store",
-        adaptationName: "strategy",
-        checkName: "car",
-        record: {
-            contextValue: "{awesomeCars.prefs.car}",
-            gradeNames: "awesomeCars.prefs.settingsStore"
-        }
-    });
-
     fluid.defaults("awesomeCars.prefs.settingsStore", {
         gradeNames: ["fluid.prefs.store"],
         invokers: {
@@ -77,6 +64,15 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         console.log("setting");
     };
 
+    fluid.defaults("awesomeCars.prefs.store", {
+        gradeNames: ["fluid.prefs.globalSettingsStore"],
+        components: {
+            settingsStore: {
+                type: "awesomeCars.prefs.settingsStore"
+            }
+        }
+    });
+
     /**
      * Initialize and instantiate the editor
      * TODO: Update this when https://issues.fluidproject.org/browse/FLUID-5817 is addressed
@@ -85,6 +81,9 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         return fluid.prefs.create(container, {
             build: {
                 gradeNames: ["awesomeCars.prefs.auxSchema"]
+            },
+            prefsEditor: {
+                storeType: "awesomeCars.prefs.store"
             }
         });
     };
