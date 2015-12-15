@@ -43,6 +43,40 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         }
     });
 
+    fluid.contextAware.makeChecks({"awesomeCars.prefs.car": true});
+
+    fluid.contextAware.makeAdaptation({
+        distributionName: "awesomeCars.prefs.car.storeDistributor",
+        targetName: "fluid.prefs.store",
+        adaptationName: "strategy",
+        checkName: "car",
+        record: {
+            contextValue: "{awesomeCars.prefs.car}",
+            gradeNames: "awesomeCars.prefs.settingsStore"
+        }
+    });
+
+    fluid.defaults("awesomeCars.prefs.settingsStore", {
+        gradeNames: ["fluid.prefs.store"],
+        invokers: {
+            get: {
+                funcName: "awesomeCars.prefs.settingsStore.get",
+                args: "{that}.model"
+            },
+            set: {
+                funcName: "awesomeCars.prefs.settingsStore.set",
+                args: ["{arguments}.0", "{that}.applier"]
+            }
+        }
+    });
+
+    awesomeCars.prefs.settingsStore.get = function () {
+        console.log("getting");
+    };
+    awesomeCars.prefs.settingsStore.set = function () {
+        console.log("setting");
+    };
+
     /**
      * Initialize and instantiate the editor
      * TODO: Update this when https://issues.fluidproject.org/browse/FLUID-5817 is addressed
