@@ -47,12 +47,11 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         gradeNames: ["fluid.prefs.store"],
         invokers: {
             get: {
-                funcName: "awesomeCars.prefs.store.get",
-                args: "{that}.model"
+                funcName: "awesomeCars.prefs.store.get"
             },
             set: {
                 funcName: "awesomeCars.prefs.store.set",
-                args: ["{arguments}.0", "{that}.applier"]
+                args: ["{arguments}.0"]
             }
         }
     });
@@ -60,8 +59,8 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
     awesomeCars.prefs.store.get = function () {
         fluid.log("getting"); // won't do anything without fluid.setLogging(true);
     };
-    awesomeCars.prefs.store.set = function () {
-        fluid.log("setting");
+    awesomeCars.prefs.store.set = function (settings) {
+        fluid.log("setting: "+JSON.stringify(settings));
     };
 
     /**
