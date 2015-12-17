@@ -43,35 +43,26 @@ https://github.com/fluid-project/infusion/raw/master/Infusion-LICENSE.txt
         }
     });
 
-    fluid.defaults("awesomeCars.prefs.settingsStore", {
+    fluid.defaults("awesomeCars.prefs.store", {
         gradeNames: ["fluid.prefs.store"],
         invokers: {
             get: {
-                funcName: "awesomeCars.prefs.settingsStore.get",
+                funcName: "awesomeCars.prefs.store.get",
                 args: "{that}.model"
             },
             set: {
-                funcName: "awesomeCars.prefs.settingsStore.set",
+                funcName: "awesomeCars.prefs.store.set",
                 args: ["{arguments}.0", "{that}.applier"]
             }
         }
     });
 
-    awesomeCars.prefs.settingsStore.get = function () {
-        console.log("getting");
+    awesomeCars.prefs.store.get = function () {
+        fluid.log("getting"); // won't do anything without fluid.setLogging(true);
     };
-    awesomeCars.prefs.settingsStore.set = function () {
-        console.log("setting");
+    awesomeCars.prefs.store.set = function () {
+        fluid.log("setting");
     };
-
-    fluid.defaults("awesomeCars.prefs.store", {
-        gradeNames: ["fluid.prefs.globalSettingsStore"],
-        components: {
-            settingsStore: {
-                type: "awesomeCars.prefs.settingsStore"
-            }
-        }
-    });
 
     /**
      * Initialize and instantiate the editor
